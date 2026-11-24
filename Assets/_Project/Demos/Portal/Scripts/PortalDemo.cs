@@ -89,11 +89,11 @@ namespace CardboardXR.Demos.Portal
         void UpdateHint()
         {
             if (m_Portal == null)
-                m_Hint.text = "Look at the floor and pinch to open a portal there.\nNo highlight on the floor? Look down at it for a moment.";
+                m_Hint.text = "床を見てピンチすると、そこにポータルが開きます。\n床がハイライトされないときは、少しの間、床を見下ろしてください。";
             else if (!m_Portal.IsInside)
-                m_Hint.text = "Walk through the doorway.\nUnplug the phone first if it's on a cable.";
+                m_Hint.text = "戸口をくぐってください。\nケーブルにつないでいる場合は、先に外してください。";
             else
-                m_Hint.text = "You're through. Look back: your room is behind the door.\nWalk back through to return.";
+                m_Hint.text = "通り抜けました。振り返ると、部屋がドアの向こうに見えます。\n戻るときは、もう一度くぐってください。";
         }
 
         // A small Material panel ahead and a little above, clear of the floor where the portal goes:
@@ -103,7 +103,7 @@ namespace CardboardXR.Demos.Portal
             const float distance = 1.5f;
             m_Panel = WorldUi.Panel("Portal Panel", transform, new Vector2(440f, 192f), distance);
             m_Hint = M3.Text("Hint", m_Panel, "", M3Theme.Type.BodyLarge, new Vector2(0f, 36f), new Vector2(392f, 72f));
-            M3.Button("Move portal", m_Panel, "Move portal", M3Button.Variant.Tonal, new Vector2(0f, -44f), Move, "open_with");
+            M3.Button("Move portal", m_Panel, "ポータルを移動", M3Button.Variant.Tonal, new Vector2(0f, -44f), Move, "open_with");
             WorldUi.PlaceInFront(m_Panel, m_Core.Head, distance, 8f, -25f);
         }
 

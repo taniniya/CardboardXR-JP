@@ -27,8 +27,11 @@ namespace CardboardXR.Demos.Paint
             new(0.3f, 0.45f, 1f),
             new(0.95f, 0.35f, 0.95f),
         };
-        static readonly (string label, float width)[] k_Sizes = { ("S", 0.004f), ("M", 0.01f), ("L", 0.022f) };
-        static readonly string[] k_BrushNames = { "Ink", "Tube", "Glow" };
+        static readonly (string label, float width)[] k_Sizes = { ("小", 0.004f), ("中", 0.01f), ("大", 0.022f) };
+        static readonly string[] k_BrushNames = { "インク", "チューブ", "グロー" };
+        // The Reset button asks first: pressed again within k_ResetConfirmSeconds, it clears everything.
+        const string k_ResetLabel = "全消去";
+        const string k_ResetConfirmLabel = "消す？";
         static readonly int k_BaseColor = Shader.PropertyToID("_BaseColor");
         // Glow strokes are drawn a little wider, since their edges fade.
         const float k_GlowWidthScale = 1.6f;
@@ -189,8 +192,8 @@ namespace CardboardXR.Demos.Paint
             }
 
             UpdatePanelPlacement();
-            if (m_Reset != null && Time.unscaledTime > m_ResetArmedUntil && m_Reset.Text != "Reset")
-                m_Reset.Text = "Reset";
+            if (m_Reset != null && Time.unscaledTime > m_ResetArmedUntil && m_Reset.Text != k_ResetLabel)
+                m_Reset.Text = k_ResetLabel;
         }
 
         Vector3 TipPosition() => m_Smoothing.Filter(m_Core.HandTracker.PinchPoint, Time.unscaledTimeAsDouble);
@@ -218,11 +221,11 @@ namespace CardboardXR.Demos.Paint
             if (Time.unscaledTime > m_ResetArmedUntil)
             {
                 m_ResetArmedUntil = Time.unscaledTime + k_ResetConfirmSeconds;
-                m_Reset.Text = "Sure?";
+                m_Reset.Text = k_ResetConfirmLabel;
                 return;
             }
             m_ResetArmedUntil = float.NegativeInfinity;
-            m_Reset.Text = "Reset";
+            m_Reset.Text = k_ResetLabel;
             EndPinch();
             foreach (var stroke in m_Strokes)
                 Destroy(stroke.gameObject);
@@ -269,9 +272,9 @@ namespace CardboardXR.Demos.Paint
             m_SizeButtons = M3.Segments("Size", m_Panel, sizes, new Vector2(0f, -58f), 128f, SetSize);
 
             const float width = 124f;
-            M3.Button("Undo", m_Panel, "Undo", M3Button.Variant.Tonal, new Vector2(-134f, -130f), Undo, "undo", width);
-            m_Reset = M3.Button("Reset", m_Panel, "Reset", M3Button.Variant.Tonal, new Vector2(0f, -130f), ClearAll, "delete", width);
-            m_Room = M3.Button("Room", m_Panel, "Room", M3Button.Variant.Tonal, new Vector2(134f, -130f), ToggleRoom, "visibility", width);
+            M3.Button("Undo", m_Panel, "戻す", M3Button.Variant.Tonal, new Vector2(-134f, -130f), Undo, "undo", width);
+            m_Reset = M3.Button("Reset", m_Panel, k_ResetLabel, M3Button.Variant.Tonal, new Vector2(0f, -130f), ClearAll, "delete", width);
+            m_Room = M3.Button("Room", m_Panel, "部屋", M3Button.Variant.Tonal, new Vector2(134f, -130f), ToggleRoom, "visibility", width);
         }
 
         void SetColor(int index)

@@ -60,9 +60,33 @@ namespace ProjectBootstrap
         const int PassthroughLayer = 29;
 
         // Invoke with: -executeMethod ProjectBootstrap.StereoBuilder.BuildAndroid
+        // An .apk, and written where -customBuildPath says when a build runner passes one (see
+        // .github/workflows/android-apk.yml), so the runner finds it where it expects its artifacts.
         public static void BuildAndroid()
         {
-            BuildAndExit(BuildScenes(), AndroidApk, BuildTarget.Android);
+            EditorUserBuildSettings.buildAppBundle = false;
+            BuildAndExit(BuildScenes(), Arg("-customBuildPath") ?? AndroidApk, BuildTarget.Android);
+        }
+
+        // An environment variable, or null when it isn't set or is empty: CARDBOARDXR_* for local
+        // builds, and the names game-ci passes for the Android workflow.
+        static string Env(string name)
+        {
+            var value = System.Environment.GetEnvironmentVariable(name);
+            return string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+        }
+
+        // The value after a command line switch, or null. Unity ignores switches it doesn't know, so
+        // these are a way to pass one-off settings to a build.
+        static string Arg(string name)
+        {
+            var args = System.Environment.GetCommandLineArgs();
+            for (var i = 0; i < args.Length - 1; i++)
+            {
+                if (args[i] == name && !string.IsNullOrWhiteSpace(args[i + 1]))
+                    return args[i + 1];
+            }
+            return null;
         }
 
         // The same scenes as an Xcode project for the iPhone, which Xcode then builds and signs.
@@ -119,12 +143,14 @@ namespace ProjectBootstrap
         // which differs on every machine; its password comes in CARDBOARDXR_KEYSTORE_PASS (also the key's,
         // as in a PKCS12 keystore) and the key's alias in CARDBOARDXR_KEY_ALIAS, by default cardboardxr.
         // False if they're set wrong, rather than shipping a build signed with the wrong key.
+        // The Android workflow passes game-ci's names instead: VERSION, ANDROID_KEYSTORE_PASS and
+        // ANDROID_KEYALIAS_NAME, and the keystore path as -cardboardxrKeyStore (in customParameters).
         static bool ApplyRelease(BuildTarget target)
         {
-            var version = System.Environment.GetEnvironmentVariable("CARDBOARDXR_VERSION");
-            if (!string.IsNullOrWhiteSpace(version))
+            var version = Env("CARDBOARDXR_VERSION") ?? Env("VERSION");
+            if (version != null)
             {
-                var parts = version.Trim().Split('.');
+                var parts = version.Split('.');
                 if (parts.Length != 3 || !int.TryParse(parts[0], out var major) || !int.TryParse(parts[1], out var minor) ||
                     !int.TryParse(parts[2], out var patch) || minor > 99 || patch > 99)
                 {
@@ -136,20 +162,20 @@ namespace ProjectBootstrap
                 Debug.Log($"[Build] Version {PlayerSettings.bundleVersion} ({PlayerSettings.Android.bundleVersionCode})");
             }
 
-            var keystore = System.Environment.GetEnvironmentVariable("CARDBOARDXR_KEYSTORE");
-            if (target != BuildTarget.Android || string.IsNullOrWhiteSpace(keystore))
+            var keystore = Env("CARDBOARDXR_KEYSTORE") ?? Arg("-cardboardxrKeyStore");
+            if (target != BuildTarget.Android || keystore == null)
                 return true;
-            var password = System.Environment.GetEnvironmentVariable("CARDBOARDXR_KEYSTORE_PASS");
+            var password = Env("CARDBOARDXR_KEYSTORE_PASS") ?? Env("ANDROID_KEYSTORE_PASS");
             if (!System.IO.File.Exists(keystore) || string.IsNullOrEmpty(password))
             {
                 Debug.LogError($"[Build] Keystore {keystore} missing, or CARDBOARDXR_KEYSTORE_PASS unset");
                 return false;
             }
-            var alias = System.Environment.GetEnvironmentVariable("CARDBOARDXR_KEY_ALIAS");
+            var alias = Env("CARDBOARDXR_KEY_ALIAS") ?? Env("ANDROID_KEYALIAS_NAME");
             PlayerSettings.Android.useCustomKeystore = true;
             PlayerSettings.Android.keystoreName = keystore;
             PlayerSettings.Android.keystorePass = password;
-            PlayerSettings.Android.keyaliasName = string.IsNullOrWhiteSpace(alias) ? "cardboardxr" : alias.Trim();
+            PlayerSettings.Android.keyaliasName = string.IsNullOrWhiteSpace(alias) ? "cardboardxr" : alias;
             PlayerSettings.Android.keyaliasPass = password;
             Debug.Log($"[Build] Signing with {System.IO.Path.GetFileName(keystore)}, key {PlayerSettings.Android.keyaliasName}");
             return true;
@@ -228,7 +254,7 @@ namespace ProjectBootstrap
             BuildFade(head, demos);
             var boundary = BuildRoomBoundary(origin, fusion, boundaryShader);
             // Shown in 6DoF only (RoomBoundary), where there's AR to scan with.
-            var scanButton = ToolbarItem(panel, "Scan", "radar", "Scan Room", boundary.ToggleScan);
+            var scanButton = ToolbarItem(panel, "Scan", "radar", "部屋スキャン", boundary.ToggleScan);
             toolbar[4] = scanButton;
             var serializedBoundary = new SerializedObject(boundary);
             serializedBoundary.FindProperty("m_ScanButton").objectReferenceValue = scanButton;
@@ -657,7 +683,7 @@ namespace ProjectBootstrap
             hint.localPosition = direction * distance;
             hint.localRotation = Quaternion.LookRotation(direction, Vector3.up);
             M3.Icon("Icon", hint, "pinch", 20f, new Vector2(-size.x / 2f + 12f + 10f, 0f), M3Theme.InverseOnSurface);
-            M3.Text("Label", hint, "Raise your hand into view to pinch", M3Theme.Type.BodyMedium, new Vector2(16f, 0f),
+            M3.Text("Label", hint, "手をカメラに映してピンチ", M3Theme.Type.BodyMedium, new Vector2(16f, 0f),
                 new Vector2(size.x - 56f, 24f), M3Theme.InverseOnSurface);
             hint.gameObject.SetActive(false);
             return hint.gameObject;
@@ -799,10 +825,10 @@ namespace ProjectBootstrap
             // Apps shows the app library above the panel (BuildLibrary), the way to the lobby and
             // between demos.
             var library = demos.gameObject.AddComponent<AppLibrary>();
-            items[0] = ToolbarItem(panel, "Apps", "apps", "Apps", library.Toggle);
-            items[1] = ToolbarItem(panel, "Recenter", "my_location", "Recenter", fusion.Recenter);
+            items[0] = ToolbarItem(panel, "Apps", "apps", "アプリ", library.Toggle);
+            items[1] = ToolbarItem(panel, "Recenter", "my_location", "正面に戻す", fusion.Recenter);
             items[2] = ToolbarItem(panel, "Tracking Mode", "view_in_ar", "6DoF", fusion.ToggleMode);
-            items[3] = ToolbarItem(panel, "Passthrough", "visibility", "Passthrough", passthrough.Toggle);
+            items[3] = ToolbarItem(panel, "Passthrough", "visibility", "パススルー", passthrough.Toggle);
             return (items, panel);
         }
 

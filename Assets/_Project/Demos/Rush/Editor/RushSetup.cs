@@ -14,9 +14,9 @@ namespace ProjectBootstrap
         public override DemoCatalog.Entry Entry => new()
         {
             Id = "rush",
-            Title = "Orb Rush",
-            Description = "Orbs fly toward you: hit them with your hand as they reach the rings. One hand, a minute a round, getting faster.",
-            Tagline = "Hit the incoming orbs with your hand",
+            Title = "オーブラッシュ",
+            Description = "オーブが手前に飛んできます。リングに届くところで手で打ちましょう。片手で1分1ラウンド、だんだん速くなります。",
+            Tagline = "飛んでくるオーブを手で打つ",
             Icon = "bolt",
             Tint = new Color(0.12f, 0.55f, 0.62f),
             Requirements = new DemoRequirements { SixDof = Need.On, Passthrough = Need.Off, Hands = Need.On },

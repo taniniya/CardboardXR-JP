@@ -36,7 +36,7 @@ namespace ProjectBootstrap
             library.Show(true);
             Render(camera, Path.Combine(folder, "library.png"), -6f, 0f);
             var tagline = panel.Find("App Library/Tagline").GetComponent<TMP_Text>();
-            tagline.text = "Paint in the air with your hand";
+            tagline.text = "手で空中に絵を描く";
             Render(camera, Path.Combine(folder, "library-gaze.png"), -6f, 0f);
             panel.gameObject.SetActive(false);
             RenderDemoPanels(camera, folder);
@@ -58,7 +58,7 @@ namespace ProjectBootstrap
                 foreach (var (title, file, drive) in new[]
                          {
                              ("Sample_360", "Sample_360.mp4", false), ("Sample_180_sbs", "Sample_180_sbs.mp4", false),
-                             ("Beach walk", "beach_360_tb.mp4", false), ("Concert", "concert_180.mp4", true),
+                             ("海辺の散歩", "beach_360_tb.mp4", false), ("ライブ", "concert_180.mp4", true),
                          })
                 {
                     var entry = System.Activator.CreateInstance(entryType);
@@ -79,7 +79,7 @@ namespace ProjectBootstrap
                 ((RectTransform)Get(video, "m_ControlsPage")).gameObject.SetActive(true);
                 panel.sizeDelta = new Vector2(600f, 352f);
                 ((TMP_Text)Get(video, "m_Title")).text = "Sample_180_sbs";
-                ((TMP_Text)Get(video, "m_FormatLine")).text = "180 3D side by side";
+                ((TMP_Text)Get(video, "m_FormatLine")).text = "180 3D 左右";
                 ((TMP_Text)Get(video, "m_Time")).text = "0:42 / 2:10";
                 ((M3Slider)Get(video, "m_Seek")).Value = 0.32f;
                 Render(camera, Path.Combine(folder, "video-controls.png"), -12f, 0f);
@@ -105,17 +105,17 @@ namespace ProjectBootstrap
                 Call(rush, "BuildMenu");
                 Call(rush, "BuildPauseMenu");
                 Call(rush, "BuildHud");
-                ((TMP_Text)Get(rush, "m_MenuBody")).text = "Orbs fly toward you: hit them with your hand as they reach the rings.\n" +
-                                                           "Face the way you want to play, then press Start.\nBest score 1240";
+                ((TMP_Text)Get(rush, "m_MenuBody")).text = "オーブが手前に飛んできます。リングに届くところで手で打ってください。\n" +
+                                                           "向きたい方向を向いてから「スタート」を押します。\nベストスコア 1240";
                 var menu = Show(rush, "m_Menu", 1.6f, -8f);
                 Render(camera, Path.Combine(folder, "rush-menu.png"), -8f, 0f);
                 menu.gameObject.SetActive(false);
-                ((TMP_Text)Get(rush, "m_PauseBody")).text = "Score 860, 34 s left";
+                ((TMP_Text)Get(rush, "m_PauseBody")).text = "スコア 860、残り 34 秒";
                 var pause = Show(rush, "m_PauseMenu", 1.6f, -8f);
                 Render(camera, Path.Combine(folder, "rush-pause.png"), -8f, 0f);
                 pause.gameObject.SetActive(false);
-                ((TMP_Text)Get(rush, "m_HudText")).text = "860    Combo 12 ×2    0:34";
-                ((TMP_Text)Get(rush, "m_Callout")).text = "Perfect";
+                ((TMP_Text)Get(rush, "m_HudText")).text = "860    コンボ 12 ×2    0:34";
+                ((TMP_Text)Get(rush, "m_Callout")).text = "パーフェクト";
                 ((TMP_Text)Get(rush, "m_Callout")).color = M3Theme.Primary;
                 Show(rush, "m_Hud", 2.4f, 10f);
                 Render(camera, Path.Combine(folder, "rush-hud.png"), 0f, 0f);

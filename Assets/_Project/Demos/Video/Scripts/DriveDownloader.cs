@@ -30,13 +30,13 @@ namespace CardboardXR.Demos.Video
             while (!operation.isDone)
             {
                 progress?.Invoke(request.downloadProgress);
-                entry.Status = $"Downloading {request.downloadProgress * 100f:F0}% ({request.downloadedBytes / 1e6:F0} MB)";
+                entry.Status = $"ダウンロード中 {request.downloadProgress * 100f:F0}%（{request.downloadedBytes / 1e6:F0} MB）";
                 yield return null;
             }
 
             if (request.result != UnityWebRequest.Result.Success)
             {
-                entry.Status = $"Download failed: {request.error}";
+                entry.Status = $"ダウンロードに失敗しました: {request.error}";
                 Debug.LogWarning($"[Video] Downloading {entry.Title} failed: {request.error} (HTTP {request.responseCode})");
                 TryDelete(partial);
                 yield break;
@@ -47,7 +47,7 @@ namespace CardboardXR.Demos.Video
             var type = request.GetResponseHeader("Content-Type") ?? "";
             if (type.StartsWith("text/html", StringComparison.OrdinalIgnoreCase))
             {
-                entry.Status = "Drive sent a web page, not the video: share it as \"Anyone with the link\"";
+                entry.Status = "Drive が動画ではなく Web ページを返しました。「リンクを知っている全員」で共有してください";
                 Debug.LogWarning($"[Video] Drive returned a page for {entry.Title}, not the file: it's not shared publicly, or over quota");
                 TryDelete(partial);
                 yield break;
@@ -66,7 +66,7 @@ namespace CardboardXR.Demos.Video
             }
             catch (Exception e) when (e is IOException or UnauthorizedAccessException)
             {
-                entry.Status = $"Couldn't save the download: {e.Message}";
+                entry.Status = $"ダウンロードを保存できません: {e.Message}";
                 Debug.LogWarning($"[Video] Saving {entry.Title} as {file} failed: {e.Message}");
                 TryDelete(partial);
                 yield break;
@@ -75,8 +75,8 @@ namespace CardboardXR.Demos.Video
             var megabytes = new FileInfo(file).Length / 1e6;
             Debug.Log($"[Video] Downloaded {name}: {megabytes:F0} MB in {Time.realtimeSinceStartup - started:F0} s");
             // A title from the list was the user's; otherwise the file's own name, whose tags may say
-            // the format.
-            if (entry.Title.StartsWith("Drive video ", StringComparison.Ordinal))
+            // the format. VideoLibrary's placeholder title for one with no name (Driveの動画 ...).
+            if (entry.Title.StartsWith("Driveの動画 ", StringComparison.Ordinal))
             {
                 entry.Title = Path.GetFileNameWithoutExtension(name);
                 entry.Format = VideoFormat.FromFileName(name);

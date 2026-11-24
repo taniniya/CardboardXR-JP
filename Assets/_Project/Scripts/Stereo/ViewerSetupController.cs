@@ -17,7 +17,7 @@ namespace CardboardXR.Stereo
     public class ViewerSetupController : MonoBehaviour
     {
         const string k_SavedViewerKey = "CardboardXR.ViewerUrl";
-        const string k_ScanPrompt = "Point the camera at the QR code on your viewer.";
+        const string k_ScanPrompt = "ビューアのQRコードをカメラで写してください。";
         const float k_RetryDelaySeconds = 2.5f;
         const float k_ToastSeconds = 3f;
 
@@ -138,7 +138,7 @@ namespace CardboardXR.Stereo
             m_ShownMono = m_Rig.IsMono;
             if (m_View != null)
             {
-                m_View.Text = m_ShownMono ? "Viewer view" : "Phone view";
+                m_View.Text = m_ShownMono ? "ビューア表示" : "スマホ表示";
                 m_View.Icon = m_ShownMono ? "view_agenda" : "smartphone";
             }
         }
@@ -159,7 +159,7 @@ namespace CardboardXR.Stereo
 
             m_Resolving = true;
             m_Scanner.enabled = false;
-            m_Status.text = "Reading viewer...";
+            m_Status.text = "ビューアを読み取っています…";
             Debug.Log($"[Viewer] Scanned: {text}");
 
             var (status, url) = await ViewerUrlResolver.ResolveAsync(text);
@@ -174,14 +174,14 @@ namespace CardboardXR.Stereo
                 PlayerPrefs.Save();
                 m_Rig.Viewer = viewer;
                 SetScanning(false);
-                ShowToast($"Viewer: {viewer.vendor} {viewer.model}");
+                ShowToast($"ビューア: {viewer.vendor} {viewer.model}");
                 Debug.Log($"[Viewer] Switched to {viewer.vendor} {viewer.model} from {url}");
                 return;
             }
 
             m_Status.text = status == ViewerUrlResolver.Status.ConnectionError
-                ? "Couldn't follow the code's link. Check the connection and try again."
-                : "That doesn't look like a Cardboard viewer code. Trying again...";
+                ? "コードのリンクを開けませんでした。接続を確認してもう一度お試しください。"
+                : "Cardboardビューアのコードではないようです。もう一度読み取ります…";
             await Awaitable.WaitForSecondsAsync(k_RetryDelaySeconds);
             if (m_ScanPanel.activeSelf)
             {
@@ -196,7 +196,7 @@ namespace CardboardXR.Stereo
             PlayerPrefs.Save();
             m_Rig.Viewer = ViewerParams.CardboardV1;
             SetScanning(false);
-            ShowToast("Viewer: Cardboard v1");
+            ShowToast("ビューア: Cardboard v1");
         }
 
         void ShowToast(string message)
@@ -238,13 +238,13 @@ namespace CardboardXR.Stereo
             m_SettingsButton = M3.IconButton("Settings", corner, "settings", M3Button.Variant.Tonal, Vector2.zero, ToggleMenu, 40f).gameObject;
             var menuFrame = Frame("Menu Frame", root, new Vector2(1f, 1f), new Vector2(-12f, -60f), new Vector2(200f, 188f));
             var menu = M3.Surface("Menu", menuFrame, Vector2.zero, new Vector2(200f, 188f), M3Theme.SurfaceContainer, M3Theme.k_ShapeSmall);
-            M3.Button("Set viewer", menu.rectTransform, "Set viewer", M3Button.Variant.Text, new Vector2(0f, 60f), ChooseSetViewer,
+            M3.Button("Set viewer", menu.rectTransform, "ビューアを設定", M3Button.Variant.Text, new Vector2(0f, 60f), ChooseSetViewer,
                 "qr_code_scanner", 184f);
-            m_View = M3.Button("View", menu.rectTransform, "Phone view", M3Button.Variant.Text, new Vector2(0f, 0f), ToggleView,
+            m_View = M3.Button("View", menu.rectTransform, "スマホ表示", M3Button.Variant.Text, new Vector2(0f, 0f), ToggleView,
                 "smartphone", 184f);
             // The settings panel is summoned by looking at a palm and pinching; this is for when there's
             // no hand to do it with.
-            M3.Button("Open settings", menu.rectTransform, "Open settings", M3Button.Variant.Text, new Vector2(0f, -60f),
+            M3.Button("Open settings", menu.rectTransform, "設定を開く", M3Button.Variant.Text, new Vector2(0f, -60f),
                 ChooseOpenSettings, "settings", 184f);
             m_Menu = menuFrame.gameObject;
             m_Menu.AddComponent<M3Fade>();
@@ -270,8 +270,8 @@ namespace CardboardXR.Stereo
                 M3Theme.k_ShapeLarge);
             m_Status = M3.Text("Status", statusBar.rectTransform, "", M3Theme.Type.BodyLarge, Vector2.zero, new Vector2(568f, 56f));
             var actions = Frame("Actions", scanRect, new Vector2(0.5f, 0f), new Vector2(0f, 16f), new Vector2(420f, 56f));
-            M3.Button("Cancel", actions, "Cancel", M3Button.Variant.Tonal, new Vector2(-110f, 0f), () => SetScanning(false), "close", 180f);
-            M3.Button("Use Cardboard v1", actions, "Use Cardboard v1", M3Button.Variant.Filled, new Vector2(100f, 0f), UseCardboardV1,
+            M3.Button("Cancel", actions, "キャンセル", M3Button.Variant.Tonal, new Vector2(-110f, 0f), () => SetScanning(false), "close", 180f);
+            M3.Button("Use Cardboard v1", actions, "Cardboard v1 を使う", M3Button.Variant.Filled, new Vector2(100f, 0f), UseCardboardV1,
                 null, 210f);
 
             // A Material snackbar: inverse colors, low on the screen.

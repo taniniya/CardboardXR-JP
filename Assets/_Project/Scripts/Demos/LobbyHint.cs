@@ -19,7 +19,7 @@ namespace CardboardXR.Demos
             var direction = Quaternion.Euler(-m_Pitch, 0f, 0f) * Vector3.forward;
             hint.SetPositionAndRotation(direction * m_Distance, Quaternion.LookRotation(direction, Vector3.up));
             M3.Icon("Icon", hint, "apps", 20f, new Vector2(-230f, 0f), M3Theme.OnSurfaceVariant);
-            M3.Text("Text", hint, "Look at your palm, then pinch, for apps and settings", M3Theme.Type.BodyLarge, new Vector2(16f, 0f),
+            M3.Text("Text", hint, "手のひらを見てピンチすると、アプリと設定が開きます", M3Theme.Type.BodyLarge, new Vector2(16f, 0f),
                 new Vector2(460f, 32f), M3Theme.OnSurfaceVariant);
         }
     }

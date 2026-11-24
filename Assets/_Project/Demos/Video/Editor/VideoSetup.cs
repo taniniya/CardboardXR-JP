@@ -14,9 +14,9 @@ namespace ProjectBootstrap
         public override DemoCatalog.Entry Entry => new()
         {
             Id = "video",
-            Title = "360 Video",
-            Description = "Watch 360 and VR180 videos, 2D or 3D, all around you. Tap the video for the controls. Plays videos copied to the phone or linked from Google Drive.",
-            Tagline = "360 and VR180 videos all around you",
+            Title = "360度動画",
+            Description = "360度動画とVR180動画を、2Dでも3Dでも周囲に映して見られます。動画をタップすると操作パネルが出ます。スマホにコピーした動画や、Google Driveで共有した動画を再生できます。",
+            Tagline = "360度・VR180の動画を周囲に映す",
             Icon = "360",
             Tint = new Color(0.7f, 0.25f, 0.29f),
             Requirements = new DemoRequirements { SixDof = Need.Off, Passthrough = Need.Off, Hands = Need.Off },

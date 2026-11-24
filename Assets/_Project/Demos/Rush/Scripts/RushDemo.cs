@@ -305,13 +305,13 @@ namespace CardboardXR.Demos.Rush
             {
                 m_Perfects++;
                 Play(m_PerfectSound, 0.8f);
-                Callout("Perfect", M3Theme.Primary);
+                Callout("パーフェクト", M3Theme.Primary);
             }
             else
             {
                 m_Goods++;
                 Play(m_GoodSound, 0.7f);
-                Callout("Good", new Color(1f, 0.9f, 0.4f));
+                Callout("グッド", new Color(1f, 0.9f, 0.4f));
             }
             if (m_Perfects + m_Goods <= 3 || (m_Perfects + m_Goods) % 10 == 0)
                 Debug.Log($"[Rush] {judgement} at {distance * 100f:F0} cm; combo {m_Combo}, score {m_Score}");
@@ -333,11 +333,11 @@ namespace CardboardXR.Demos.Rush
             Debug.Log($"[Rush] Round over: score {m_Score}{(newBest ? " (new best)" : "")}, {m_Perfects} perfect, {m_Goods} good, " +
                       $"{m_Misses} missed of {total}, accuracy {accuracy:F0}%, best combo {m_BestCombo}");
             M3Fade.Hide(m_Hud.gameObject);
-            m_MenuTitle.text = newBest ? "New best!" : "Round over";
-            m_MenuBody.text = $"Score {m_Score}   (best {m_Best})\n" +
-                              $"{m_Perfects} perfect, {m_Goods} good, {m_Misses} missed\n" +
-                              $"Accuracy {accuracy:F0}%   Best combo {m_BestCombo}";
-            m_Start.Text = "Play again";
+            m_MenuTitle.text = newBest ? "ベスト更新！" : "ラウンド終了";
+            m_MenuBody.text = $"スコア {m_Score}（ベスト {m_Best}）\n" +
+                              $"パーフェクト {m_Perfects}、グッド {m_Goods}、ミス {m_Misses}\n" +
+                              $"精度 {accuracy:F0}%　最大コンボ {m_BestCombo}";
+            m_Start.Text = "もう一度";
             PlaceMenu();
         }
 
@@ -347,7 +347,7 @@ namespace CardboardXR.Demos.Rush
                 return;
             m_State = State.Paused;
             m_Track.gameObject.SetActive(false);
-            m_PauseBody.text = $"Score {m_Score}, {Mathf.CeilToInt(Mathf.Max(0f, RushRules.k_RoundSeconds - (m_Clock - m_RoundStart)))} s left";
+            m_PauseBody.text = $"スコア {m_Score}、残り {Mathf.CeilToInt(Mathf.Max(0f, RushRules.k_RoundSeconds - (m_Clock - m_RoundStart)))} 秒";
             PlaceInFront(m_PauseMenu);
             Debug.Log($"[Rush] Paused at {m_Clock - m_RoundStart:F0} s, score {m_Score}");
         }
@@ -403,11 +403,11 @@ namespace CardboardXR.Demos.Rush
         // A Material dialog: Resume first, as the filled button, then Restart and Quit round.
         void BuildPauseMenu()
         {
-            m_PauseMenu = Dialog("Rush Pause", new Vector2(440f, 200f), "Paused", out m_PauseBody);
+            m_PauseMenu = Dialog("Rush Pause", new Vector2(440f, 200f), "一時停止", out m_PauseBody);
             DialogActions(m_PauseMenu, -48f,
-                ("Quit round", M3Button.Variant.Text, null, QuitRound),
-                ("Restart", M3Button.Variant.Tonal, "restart_alt", Restart),
-                ("Resume", M3Button.Variant.Filled, "play_arrow", Resume));
+                ("やめる", M3Button.Variant.Text, null, QuitRound),
+                ("やり直す", M3Button.Variant.Tonal, "restart_alt", Restart),
+                ("再開", M3Button.Variant.Filled, "play_arrow", Resume));
             m_PauseMenu.gameObject.SetActive(false);
         }
 
@@ -481,11 +481,11 @@ namespace CardboardXR.Demos.Rush
         void ShowMenu()
         {
             m_State = State.Menu;
-            m_MenuTitle.text = "Orb Rush";
-            m_MenuBody.text = "Orbs fly toward you: hit them with your hand as they reach the rings.\n" +
-                              "Face the way you want to play, then press Start.\n" +
-                              $"Best score {m_Best}";
-            m_Start.Text = "Start";
+            m_MenuTitle.text = "オーブラッシュ";
+            m_MenuBody.text = "オーブが手前に飛んできます。リングに届くところで手で打ってください。\n" +
+                              "向きたい方向を向いてから「スタート」を押します。\n" +
+                              $"ベストスコア {m_Best}";
+            m_Start.Text = "スタート";
             PlaceMenu();
         }
 
@@ -496,18 +496,18 @@ namespace CardboardXR.Demos.Rush
             if (m_Start.Interactable != ready)
             {
                 m_Start.Interactable = ready;
-                m_Start.Text = ready ? (m_State == State.Results ? "Play again" : "Start") : "Scanning…";
+                m_Start.Text = ready ? (m_State == State.Results ? "もう一度" : "スタート") : "スキャン中…";
             }
         }
 
         // The start and results dialog. While the floor is being found, Start waits, saying so.
         void BuildMenu()
         {
-            m_Menu = Dialog("Rush Menu", new Vector2(480f, 268f), "Orb Rush", out m_MenuBody);
+            m_Menu = Dialog("Rush Menu", new Vector2(480f, 268f), "オーブラッシュ", out m_MenuBody);
             m_MenuTitle = m_Menu.Find("Headline").GetComponent<TMP_Text>();
             // At the right.
             const float width = 180f;
-            m_Start = M3.Button("Start", m_Menu, "Start", M3Button.Variant.Filled, new Vector2(240f - 24f - width / 2f, -82f), StartRound,
+            m_Start = M3.Button("Start", m_Menu, "スタート", M3Button.Variant.Filled, new Vector2(240f - 24f - width / 2f, -82f), StartRound,
                 width: width);
         }
 
@@ -529,7 +529,7 @@ namespace CardboardXR.Demos.Rush
         {
             var left = Mathf.Max(0f, RushRules.k_RoundSeconds - elapsed);
             var multiplier = RushRules.Multiplier(m_Combo);
-            m_HudText.text = $"{m_Score}    Combo {m_Combo}{(multiplier > 1 ? $" ×{multiplier}" : "")}    0:{Mathf.CeilToInt(left):00}";
+            m_HudText.text = $"{m_Score}    コンボ {m_Combo}{(multiplier > 1 ? $" ×{multiplier}" : "")}    0:{Mathf.CeilToInt(left):00}";
             if (Time.time > m_CalloutUntil && m_Callout.text.Length > 0)
                 m_Callout.text = "";
         }

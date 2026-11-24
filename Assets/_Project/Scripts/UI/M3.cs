@@ -314,19 +314,44 @@ namespace CardboardXR.UI
 
         static float PreferredWidth(TMP_FontAsset font, string text, float size)
         {
-            // Font units to dp: the font's em is size dp.
             var width = 0f;
-            var faceInfo = font.faceInfo;
-            var scale = size / faceInfo.pointSize * faceInfo.scale;
             foreach (var c in text)
-            {
-                if (font.characterLookupTable.TryGetValue(c, out var character) ||
-                    font.TryAddCharacters(c.ToString()) && font.characterLookupTable.TryGetValue(c, out character))
-                    width += character.glyph.metrics.horizontalAdvance * scale;
-                else
-                    width += size * 0.55f;
-            }
+                width += GlyphWidth(font, c, size);
             return width;
+        }
+
+        // One character's width in dp: its glyph in the font, or, for a character the font doesn't have
+        // (Japanese in Roboto), the glyph of a TMP Settings fallback that does. Either way it's measured
+        // as TMP draws it, rather than guessed, or a label in Japanese would be sized for a Latin font.
+        static float GlyphWidth(TMP_FontAsset font, char c, float size)
+        {
+            if (TryGlyphWidth(font, c, size, out var width))
+                return width;
+            var fallbacks = TMP_Settings.fallbackFontAssets;
+            if (fallbacks != null)
+            {
+                foreach (var fallback in fallbacks)
+                {
+                    if (fallback != font && TryGlyphWidth(fallback, c, size, out width))
+                        return width;
+                }
+            }
+            // Neither has it: full-width characters (kana, kanji) take an em, the rest about half of one.
+            return c >= 0x2E80 ? size : size * 0.55f;
+        }
+
+        static bool TryGlyphWidth(TMP_FontAsset font, char c, float size, out float width)
+        {
+            width = 0f;
+            if (font == null || font.faceInfo.pointSize == 0)
+                return false;
+            if (!font.characterLookupTable.TryGetValue(c, out var character) &&
+                !(font.TryAddCharacters(c.ToString()) && font.characterLookupTable.TryGetValue(c, out character)))
+                return false;
+            // Font units to dp: the font's em is size dp.
+            var scale = size / font.faceInfo.pointSize * font.faceInfo.scale;
+            width = character.glyph.metrics.horizontalAdvance * scale;
+            return true;
         }
 
         static RectTransform NewRect(string name, Transform parent)

@@ -14,9 +14,9 @@ namespace ProjectBootstrap
         public override DemoCatalog.Entry Entry => new()
         {
             Id = "paint",
-            Title = "Air Paint",
-            Description = "Paint in the air around you with your hand, like Tilt Brush. Pinch to paint; look at the tool panel and pinch to change color, brush and size.",
-            Tagline = "Paint in the air with your hand",
+            Title = "空間ペイント",
+            Description = "Tilt Brushのように、手で空中に絵を描けます。ピンチで描画。ツールパネルを見てピンチすると、色・筆・太さを変えられます。",
+            Tagline = "手で空中に絵を描く",
             Icon = "brush",
             Tint = new Color(0.48f, 0.31f, 0.75f),
             Requirements = new DemoRequirements { SixDof = Need.On, Passthrough = Need.On, Hands = Need.On },

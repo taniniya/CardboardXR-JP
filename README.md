@@ -91,6 +91,26 @@ it and run `ios_launch.sh`.
 and contents, and makes a draft GitHub release with it to review and publish. The script's header
 says where the keystore and its password go.
 
+### Building the APK in GitHub Actions
+
+`.github/workflows/android-apk.yml` builds an unsigned-by-default APK when a version tag (`v0.0.1`) is
+pushed, or on demand (Actions > Android APK > Run workflow), and adds it to the tag's release. It runs
+the same build method as the scripts (`ProjectBootstrap.StereoBuilder.BuildAndroid`), on Unity
+`6000.6.8f1` through [game-ci](https://game.ci).
+
+Secrets (Settings > Secrets and variables > Actions):
+
+- `UNITY_LICENSE`: the contents of a Unity `.ulf`, with `UNITY_EMAIL` and `UNITY_PASSWORD`, or
+  `UNITY_SERIAL` for a Plus/Pro seat instead of those three. https://game.ci/docs/github/activation
+- Optional signing: `ANDROID_KEYSTORE_BASE64` (a base64 `.keystore`), `ANDROID_KEYSTORE_PASS` and
+  `ANDROID_KEY_ALIAS` (default `cardboardxr`). Without them the APK is signed with Unity's debug key,
+  which installs, but can't update a build signed with another key.
+
+Japanese text is drawn in M PLUS 1p, bundled at `Assets/_Project/UI/Resources/MPLUS1p-Regular.ttf` (SIL
+Open Font License 1.1; see `THIRD_PARTY_NOTICES.md`). Every build makes it the dynamic fallback font in
+TMP Settings (`ProjectBootstrap.JapaneseFontSetup`), and `CardboardXR.UI.JapaneseFont` does the same at
+startup for a build without that step.
+
 ### Launch options
 
 Development overrides, given the same way on both platforms after the script's own arguments:

@@ -16,9 +16,9 @@ namespace ProjectBootstrap
         public override DemoCatalog.Entry Entry => new()
         {
             Id = "portal",
-            Title = "Portal",
-            Description = "Open a doorway on your floor and walk through it into another world, then look back at your room through the door.",
-            Tagline = "A doorway on your floor into another world",
+            Title = "ポータル",
+            Description = "床にドアを開けて、別の世界へ歩いて入れます。振り返れば、ドアの向こうに自分の部屋が見えます。",
+            Tagline = "床に開いたドアから別世界へ",
             Icon = "door_front",
             Tint = new Color(0.23f, 0.25f, 0.6f),
             Requirements = new DemoRequirements { SixDof = Need.On, Passthrough = Need.On, Hands = Need.On },

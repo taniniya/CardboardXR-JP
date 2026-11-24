@@ -142,7 +142,7 @@ namespace CardboardXR.Demos.Video
             m_Player.url = entry.Url;
             m_Player.Prepare();
             m_Title.text = entry.Title;
-            entry.Status = "Loading";
+            entry.Status = "読み込み中";
             Debug.Log($"[Video] Opening {entry.Title} ({entry.Format})");
         }
 
@@ -179,7 +179,7 @@ namespace CardboardXR.Demos.Video
         void OnError(VideoPlayer player, string message)
         {
             if (m_Current >= 0)
-                m_Library[m_Current].Status = $"Couldn't play: {message}";
+                m_Library[m_Current].Status = $"再生できません: {message}";
             Debug.LogWarning($"[Video] Couldn't play {(m_Current >= 0 ? m_Library[m_Current].Title : player.url)}: {message}");
             m_Current = -1;
             m_Sphere.Show(null, default);
@@ -306,7 +306,7 @@ namespace CardboardXR.Demos.Video
         {
             var pages = Mathf.Max(1, (m_Library.Count + k_EntriesPerPage - 1) / k_EntriesPerPage);
             m_Page = Mathf.Clamp(m_Page, 0, pages - 1);
-            m_PageLabel.text = $"{m_Page + 1} of {pages}";
+            m_PageLabel.text = $"{m_Page + 1} / {pages}";
             m_PreviousPage.Interactable = m_Page > 0;
             m_NextPage.Interactable = m_Page < pages - 1;
             m_EmptyMessage.gameObject.SetActive(m_Library.Count == 0);
@@ -320,7 +320,7 @@ namespace CardboardXR.Demos.Video
                 var entry = m_Library[index];
                 item.Text = entry.Title;
                 item.Icon = entry.NeedsDownload ? "cloud_download" : "movie";
-                supporting.text = entry.Status ?? (entry.NeedsDownload ? "Google Drive: pinch to download" : entry.Format.ToString());
+                supporting.text = entry.Status ?? (entry.NeedsDownload ? "Google Drive: ピンチでダウンロード" : entry.Format.ToString());
                 if (item.Selected != (index == m_Current))
                     item.Selected = index == m_Current;
             }
@@ -336,7 +336,7 @@ namespace CardboardXR.Demos.Video
 
             // The library: a list of videos, a page at a time.
             m_LibraryPage = WorldUi.CreateGroup("Library", m_Panel);
-            M3.Text("Header", m_LibraryPage, "Videos", M3Theme.Type.TitleLarge, new Vector2(-60f, 220f), new Vector2(432f, 32f),
+            M3.Text("Header", m_LibraryPage, "動画", M3Theme.Type.TitleLarge, new Vector2(-60f, 220f), new Vector2(432f, 32f),
                 alignment: TextAlignmentOptions.Left);
             M3.IconButton("Refresh", m_LibraryPage, "refresh", M3Button.Variant.Text, new Vector2(248f, 220f), () =>
             {
@@ -350,10 +350,10 @@ namespace CardboardXR.Demos.Video
                     () => Play(m_Page * k_EntriesPerPage + slot)));
             }
             var folder = Application.platform == RuntimePlatform.IPhonePlayer
-                ? "On a Mac, open the iPhone in Finder, then Files > CardboardXR > Videos, and drag videos in."
-                : $"Copy videos with: adb push video.mp4 {VideoLibrary.VideoFolder}";
-            m_EmptyMessage = M3.Text("Empty", m_LibraryPage, "No videos yet.\n\n" + folder +
-                "\n\nName tags set the format: _360, _180, _sbs, _tb. For Google Drive, list share links in videos.txt in that folder.",
+                ? "Mac では Finder で iPhone を開き、「ファイル」>「CardboardXR」>「Videos」に動画をドラッグしてください。"
+                : $"動画のコピー: adb push video.mp4 {VideoLibrary.VideoFolder}";
+            m_EmptyMessage = M3.Text("Empty", m_LibraryPage, "まだ動画がありません。\n\n" + folder +
+                "\n\nファイル名のタグで形式を指定できます: _360, _180, _sbs, _tb。Google Drive の動画は、このフォルダの videos.txt に共有リンクを並べてください。",
                 M3Theme.Type.BodyMedium, new Vector2(0f, 16f), new Vector2(520f, 300f), M3Theme.OnSurfaceVariant);
             m_PreviousPage = M3.IconButton("Previous page", m_LibraryPage, "chevron_left", M3Button.Variant.Text, new Vector2(-84f, -212f),
                 () => Page(-1));
@@ -384,10 +384,10 @@ namespace CardboardXR.Demos.Video
                 () => Skip(k_SkipSeconds));
 
             const float width = 168f;
-            M3.Button("Library", m_ControlsPage, "Library", M3Button.Variant.Tonal, new Vector2(-176f, -128f), ShowLibrary, "video_library",
+            M3.Button("Library", m_ControlsPage, "ライブラリ", M3Button.Variant.Tonal, new Vector2(-176f, -128f), ShowLibrary, "video_library",
                 width);
-            M3.Button("Next video", m_ControlsPage, "Next", M3Button.Variant.Tonal, new Vector2(0f, -128f), Next, "skip_next", width);
-            M3.Button("Format", m_ControlsPage, "Format", M3Button.Variant.Tonal, new Vector2(176f, -128f), CycleFormat, "aspect_ratio",
+            M3.Button("Next video", m_ControlsPage, "次へ", M3Button.Variant.Tonal, new Vector2(0f, -128f), Next, "skip_next", width);
+            M3.Button("Format", m_ControlsPage, "形式", M3Button.Variant.Tonal, new Vector2(176f, -128f), CycleFormat, "aspect_ratio",
                 width);
         }
 

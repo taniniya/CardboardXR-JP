@@ -159,7 +159,7 @@ namespace CardboardXR.Demos.Video
                 var fileName = name ?? (cached != null ? Path.GetFileName(cached) : null);
                 entries.Add(new VideoEntry
                 {
-                    Title = fileName != null ? Path.GetFileNameWithoutExtension(fileName) : $"Drive video {id.Substring(0, 6)}",
+                    Title = fileName != null ? Path.GetFileNameWithoutExtension(fileName) : $"Driveの動画 {id.Substring(0, 6)}",
                     Format = VideoFormat.FromFileName(fileName),
                     Url = cached,
                     DriveId = id,

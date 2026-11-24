@@ -23,6 +23,9 @@ namespace ProjectBootstrap
         public static void Ensure()
         {
             EnsureTmpResources();
+            // So Japanese text is drawn in the app's own font rather than as boxes: the font asset TMP
+            // Settings falls back to (JapaneseFontSetup), as a step of every build.
+            JapaneseFontSetup.Ensure();
             StereoBuilder.EnsureFolder(ResourcesFolder);
             var path = $"{ResourcesFolder}/{M3Assets.k_ResourcePath}.asset";
             var assets = AssetDatabase.LoadAssetAtPath<M3Assets>(path);

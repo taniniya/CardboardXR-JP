@@ -69,3 +69,17 @@ https://github.com/googlefonts/roboto (`src/hinted/`), and `MaterialIconsRound-R
 `.codepoints` list from https://github.com/google/material-design-icons (`font/`), unmodified. The
 SDF font assets beside them are generated from these. Copyright Google LLC. Licensed under the
 Apache License 2.0.
+
+## M PLUS 1p (Japanese font)
+
+`Assets/_Project/UI/Resources/MPLUS1p-Regular.ttf` is M PLUS 1p Regular, from the Google Fonts
+release of M+ FONTS (https://github.com/coz-m/MPLUS_FONTS, https://fonts.google.com/specimen/M+PLUS+1p),
+unmodified. Japanese text in the app is drawn in it: `ProjectBootstrap.JapaneseFontSetup` makes it the
+TextMesh Pro font asset `Assets/_Project/UI/MPLUS1p Regular SDF.asset` and lists it in TMP Settings'
+fallback fonts, and `CardboardXR.UI.JapaneseFont` does the same at runtime for a build without that step.
+
+- SHA-256: `2f294ad496432b1608f070d310e3aa2adcf1de4af429f4901df97ec4bd361ed1`
+- Copyright 2016 The M+ Project Authors.
+- Licensed under the SIL Open Font License, Version 1.1 (https://scripts.sil.org/OFL), which allows
+  embedding in an app and redistribution. The full license text is in
+  `Assets/_Project/UI/Fonts/MPLUS1p-OFL.txt`.

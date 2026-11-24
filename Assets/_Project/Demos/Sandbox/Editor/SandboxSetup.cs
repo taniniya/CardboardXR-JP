@@ -14,9 +14,9 @@ namespace ProjectBootstrap
         public override DemoCatalog.Entry Entry => new()
         {
             Id = "sandbox",
-            Title = "Cube Sandbox",
-            Description = "Your own room, through the camera. Look at a table or the floor and tap or pinch to put a cube there, then pick cubes up with your hand and move them.",
-            Tagline = "Put cubes on your real tables and floor, and move them by hand",
+            Title = "キューブ箱庭",
+            Description = "カメラ越しの自分の部屋。テーブルや床を見てタップかピンチすると、そこにキューブを置けます。置いたキューブは手でつかんで動かせます。",
+            Tagline = "自分の机や床にキューブを置いて動かす",
             Icon = "view_in_ar",
             Tint = new Color(0.78f, 0.49f, 0.12f),
             Requirements = new DemoRequirements { SixDof = Need.On, Passthrough = Need.On, Hands = Need.On, ScanSurfaces = true },

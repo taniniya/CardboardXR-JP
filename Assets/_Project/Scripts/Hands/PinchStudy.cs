@@ -48,7 +48,7 @@ namespace CardboardXR.Hands
                 m_HandInput.enabled = false;
             m_LastResult = m_Tracker.ResultCount;
             m_Running = true;
-            m_Prompt.text = "Pinch study\nHold one hand up in front of the camera";
+            m_Prompt.text = "ピンチ調査\nカメラの前に片手をかざしてください";
             Debug.Log($"[Pinch] Study waiting for a hand: {k_CyclesPerPose} open/pinch cycles of {k_PhaseSeconds:F0} s per pose, palm then side");
         }
 
@@ -71,7 +71,7 @@ namespace CardboardXR.Hands
             var sinceChange = elapsed;
             if (elapsed < k_IntroSeconds)
             {
-                m_Prompt.text = "Get ready\nOpen or pinch when asked";
+                m_Prompt.text = "準備してください\n合図で手を開くかピンチ";
             }
             else
             {
@@ -85,8 +85,8 @@ namespace CardboardXR.Hands
                 pose = step < stepsPerPose ? "palm" : "side";
                 phase = step % 2 == 0 ? "open" : "pinch";
                 sinceChange = elapsed - k_IntroSeconds - step * k_PhaseSeconds;
-                m_Prompt.text = (phase == "open" ? "OPEN your hand" : "PINCH thumb and index") +
-                                (pose == "palm" ? "\n(palm toward the camera)" : "\n(hand turned sideways)");
+                m_Prompt.text = (phase == "open" ? "手を開いてください" : "親指と人差し指でピンチ") +
+                                (pose == "palm" ? "\n（手のひらをカメラへ）" : "\n（手を横向きに）");
             }
 
             if (m_Tracker.ResultCount == m_LastResult)
@@ -102,7 +102,7 @@ namespace CardboardXR.Hands
         void Finish()
         {
             m_Running = false;
-            m_Prompt.text = "Done. Thanks!";
+            m_Prompt.text = "終了しました。ありがとうございます！";
             if (m_HandInput != null)
                 m_HandInput.enabled = true;
             Debug.Log("[Pinch] Study finished");

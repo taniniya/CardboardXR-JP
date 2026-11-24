@@ -114,8 +114,8 @@ namespace CardboardXR.Demos.Video
             var shape = Projection == Projection.Full360 ? "360" : "180";
             return Layout switch
             {
-                StereoLayout.SideBySide => $"{shape} 3D side by side",
-                StereoLayout.TopBottom => $"{shape} 3D top/bottom",
+                StereoLayout.SideBySide => $"{shape} 3D 左右",
+                StereoLayout.TopBottom => $"{shape} 3D 上下",
                 _ => $"{shape} 2D",
             };
         }

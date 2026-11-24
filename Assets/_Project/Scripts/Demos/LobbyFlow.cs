@@ -111,11 +111,11 @@ namespace CardboardXR.Demos
         {
             var boundary = m_Core.Boundary;
             var count = boundary.SurfaceCount;
-            m_Status.text = !tracked ? "Starting tracking… move the phone a little."
-                : count == 0 ? "No surfaces yet. Look down at the floor."
-                : $"{count} surface{(count == 1 ? "" : "s")}, {boundary.SurfaceArea:F1} m²" +
-                  (boundary.HasFloor ? ", floor found" : ". Look down at the floor.");
-            var label = boundary.HasFloor ? "Done" : "Skip";
+            m_Status.text = !tracked ? "トラッキング開始中…スマホを少し動かしてください"
+                : count == 0 ? "まだ面が見つかりません。床を見下ろしてください。"
+                : $"面を{count}個、{boundary.SurfaceArea:F1} m²" +
+                  (boundary.HasFloor ? "、床を検出" : "。床を見下ろしてください。");
+            var label = boundary.HasFloor ? "完了" : "スキップ";
             if (m_Button.Text != label)
                 m_Button.Text = label;
 
@@ -140,14 +140,14 @@ namespace CardboardXR.Demos
                 return;
             m_Panel = WorldUi.Panel("Room Scan", transform, new Vector2(440f, 196f), k_Distance);
             M3.Icon("Icon", m_Panel, "radar", 24f, new Vector2(-196f + 12f, 62f), M3Theme.Primary);
-            M3.Text("Title", m_Panel, "Scanning your room", M3Theme.Type.TitleLarge, new Vector2(16f, 62f), new Vector2(360f, 30f),
+            M3.Text("Title", m_Panel, "部屋をスキャンしています", M3Theme.Type.TitleLarge, new Vector2(16f, 62f), new Vector2(360f, 30f),
                 alignment: TextAlignmentOptions.Left);
-            M3.Text("Body", m_Panel, "Look around slowly, at the floor and any tables.", M3Theme.Type.BodyMedium, new Vector2(0f, 24f),
+            M3.Text("Body", m_Panel, "床やテーブルをゆっくり見回してください。", M3Theme.Type.BodyMedium, new Vector2(0f, 24f),
                 new Vector2(392f, 20f), alignment: TextAlignmentOptions.Left);
             m_Status = M3.Text("Status", m_Panel, "", M3Theme.Type.BodyMedium, new Vector2(0f, -6f), new Vector2(392f, 20f),
                 M3Theme.OnSurfaceVariant, TextAlignmentOptions.Left);
             const float width = 112f;
-            m_Button = M3.Button("End Scan", m_Panel, "Skip", M3Button.Variant.Tonal, new Vector2(220f - 24f - width / 2f, -58f), End,
+            m_Button = M3.Button("End Scan", m_Panel, "スキップ", M3Button.Variant.Tonal, new Vector2(220f - 24f - width / 2f, -58f), End,
                 width: width);
             m_Panel.gameObject.SetActive(false);
         }

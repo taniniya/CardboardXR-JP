@@ -44,7 +44,7 @@ namespace CardboardXR.Demos
         const float k_DotsHeight = 14f;
         const float k_DotSize = 6f;
         const float k_DotSpacing = 12f;
-        const string k_Prompt = "Look at an app to see what it is";
+        const string k_Prompt = "アプリを見ると説明が出ます";
         // Picks this soon after the library appears are ignored: it opens where the user is looking,
         // and the pinch that opened it (or a flicker of it) landed on a tile 0.6 s later, reopening the
         // demo just left.
@@ -60,8 +60,8 @@ namespace CardboardXR.Demos
         [SerializeField] RectTransform m_Grid;
         [SerializeField] TMP_Text m_Tagline;
         [Header("The lobby, which isn't in the catalog")]
-        [SerializeField] string m_LobbyTitle = "Lobby";
-        [SerializeField] string m_LobbyTagline = "A quiet room to start from";
+        [SerializeField] string m_LobbyTitle = "ロビー";
+        [SerializeField] string m_LobbyTagline = "ここから始まる静かな部屋";
         [SerializeField] string m_LobbyIcon = "home";
         [SerializeField] Color m_LobbyTint = new(0.29f, 0.36f, 0.54f);
 

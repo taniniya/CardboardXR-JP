@@ -918,7 +918,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Passthrough
+  m_text: パススルー
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0fcae934ed12a4de1932911e8c835f67, type: 2}
   m_sharedMaterial: {fileID: 1491610959475439, guid: 0fcae934ed12a4de1932911e8c835f67, type: 2}
@@ -1123,7 +1123,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Apps
+  m_text: アプリ
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0fcae934ed12a4de1932911e8c835f67, type: 2}
   m_sharedMaterial: {fileID: 1491610959475439, guid: 0fcae934ed12a4de1932911e8c835f67, type: 2}
@@ -1260,7 +1260,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Raise your hand into view to pinch
+  m_text: 手をカメラに映してピンチ
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5f2afde0b62e749f59648a84d1f70463, type: 2}
   m_sharedMaterial: {fileID: 8678073624030743509, guid: 5f2afde0b62e749f59648a84d1f70463, type: 2}
@@ -1562,7 +1562,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Recenter
+  m_text: 正面に戻す
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0fcae934ed12a4de1932911e8c835f67, type: 2}
   m_sharedMaterial: {fileID: 1491610959475439, guid: 0fcae934ed12a4de1932911e8c835f67, type: 2}
@@ -2084,7 +2084,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Scan Room
+  m_text: 部屋スキャン
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0fcae934ed12a4de1932911e8c835f67, type: 2}
   m_sharedMaterial: {fileID: 1491610959475439, guid: 0fcae934ed12a4de1932911e8c835f67, type: 2}
@@ -6514,8 +6514,8 @@ MonoBehaviour:
   m_Root: {fileID: 438856743}
   m_Grid: {fileID: 560065584}
   m_Tagline: {fileID: 1759029786}
-  m_LobbyTitle: Lobby
-  m_LobbyTagline: A quiet room to start from
+  m_LobbyTitle: ロビー
+  m_LobbyTagline: ここから始まる静かな部屋
   m_LobbyIcon: home
   m_LobbyTint: {r: 0.29, g: 0.36, b: 0.54, a: 1}
 --- !u!114 &1948047714

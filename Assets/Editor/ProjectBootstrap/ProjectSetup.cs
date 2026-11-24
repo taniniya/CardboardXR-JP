@@ -65,7 +65,7 @@ namespace ProjectBootstrap
             PlayerSettings.iOS.targetDevice = iOSTargetDevice.iPhoneOnly;
             // iOS kills the app the moment ARKit opens the camera unless it can say why.
             PlayerSettings.iOS.cameraUsageDescription =
-                "CardboardXR uses the camera to follow your head and hands, and to show the room around you.";
+                "CardboardXR はカメラを使って、頭と手の動きを追跡し、周囲の部屋を映し出します。";
             // Xcode signs with whichever Apple ID is signed into it.
             PlayerSettings.iOS.appleEnableAutomaticSigning = true;
 
