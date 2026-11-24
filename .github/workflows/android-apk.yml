@@ -1,0 +1,104 @@
+# Builds an Android .apk when a version tag (v0.0.1) is pushed, uploads it as a workflow artifact, and
+# attaches it to the tag's GitHub release. The APK installs from a file manager or `adb install -r`; it
+# is signed with Unity's debug key unless a keystore is given in the repository secrets (see below).
+#
+# One-time setup: repo Settings > Secrets and variables > Actions, add UNITY_LICENSE (the contents of a
+# Unity .ulf), UNITY_EMAIL and UNITY_PASSWORD, or UNITY_SERIAL for a Plus/Pro seat instead of the three.
+# See https://game.ci/docs/github/activation
+#
+# Optional signing: ANDROID_KEYSTORE_BASE64 (a base64 .keystore), ANDROID_KEYSTORE_PASS, and
+# ANDROID_KEY_ALIAS (default cardboardxr). The keystore must hold that key; builds signed with it install
+# over each other, which a debug-key build can't.
+#
+# The build is the project's own, ProjectBootstrap.StereoBuilder.BuildAndroid: it rebuilds the Core
+# scene, sets the version and version code (from VERSION, which game-ci fills in), signs with the
+# keystore if one is passed in customParameters as -cardboardxrKeyStore, and writes the .apk to the
+# -customBuildPath this action passes (build/Android/CardboardXR.apk).
+#
+# Third-party actions are pinned to full commit SHAs (the comment is the tag it was resolved from).
+name: Android APK
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # needed to add the .apk to the release
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      # game-ci runs Unity in Docker and only passes its own env vars in, so the version goes into
+      # ProjectSettings instead. The tag pattern above guarantees three numbers. The build's own version
+      # (and the version code that rises with it, 10203 for 1.2.3, so updates install over older
+      # releases) comes from the same tag through game-ci's VERSION.
+      - name: Set version from tag
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          sed -i -E "s/^( *)bundleVersion: .*/\1bundleVersion: $VERSION/" ProjectSettings/ProjectSettings.asset
+          grep -q "^ *bundleVersion: $VERSION\$" ProjectSettings/ProjectSettings.asset || { echo "::error::bundleVersion not set"; exit 1; }
+
+      # Optional: a release key from the repository secrets, written where the build method looks for it
+      # (the workspace is mounted at the same path inside the container). Without one, the build signs
+      # with Unity's debug key, and the build method gets no -cardboardxrKeyStore.
+      - name: Unpack the signing keystore
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$ANDROID_KEYSTORE_BASE64" ]; then
+            echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > "$GITHUB_WORKSPACE/cardboardxr.keystore"
+            echo "CARDBOARDXR_KEYSTORE_PARAMETER=-cardboardxrKeyStore $GITHUB_WORKSPACE/cardboardxr.keystore" >> "$GITHUB_ENV"
+            echo "Signing the APK with the keystore from the repository secrets"
+          else
+            echo "No ANDROID_KEYSTORE_BASE64 secret: signing with Unity's debug key"
+          fi
+
+      - uses: game-ci/unity-builder@4423ee75828dff56037d1d1cfdac6b68e3a6ba00 # v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+        with:
+          unityVersion: 6000.6.8f1
+          targetPlatform: Android
+          androidExportType: androidPackage
+          buildMethod: ProjectBootstrap.StereoBuilder.BuildAndroid
+          # BuildAndroid ends the editor itself, with 0 when it built and 1 when it didn't; -quit would
+          # end it before the build.
+          manualExit: true
+          # The tag the build is from; empty on a branch, which leaves the version as it is.
+          versioning: Tag
+          buildName: CardboardXR
+          buildsPath: build
+          # The keystore's password and key alias, which the build method reads from the environment
+          # game-ci sets from these. The path to the keystore comes in customParameters, as game-ci only
+          # unpacks ANDROID_KEYSTORE_BASE64 for its own build method.
+          androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
+          androidKeyaliasName: ${{ secrets.ANDROID_KEY_ALIAS }}
+          customParameters: ${{ env.CARDBOARDXR_KEYSTORE_PARAMETER }}
+          allowDirtyBuild: true
+
+      - name: Check the APK is there
+        run: |
+          ls -lh build/Android
+          test -s build/Android/CardboardXR.apk || { echo "::error::No APK at build/Android/CardboardXR.apk"; exit 1; }
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: CardboardXR-apk
+          path: build/Android/CardboardXR.apk
+          if-no-files-found: error
+
+      # Adds the .apk to the tag's release, creating it if missing. No body or generate_release_notes is
+      # passed, so notes on a release made by hand (with the .ipa) are left alone.
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+        with:
+          files: build/Android/CardboardXR.apk
