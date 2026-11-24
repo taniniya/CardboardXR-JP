@@ -4,6 +4,10 @@ Google Cardboard 型のビューアで使う Unity 製スマホアプリです�
 
 これは [brenpoly/CardboardXR](https://github.com/brenpoly/CardboardXR) の日本語版です。アプリ内の表示とこの README を日本語にし、日本語フォントを同梱しています。
 
+> **Custom by [taniniya](https://github.com/taniniya)**
+>
+> このリポジトリ [taniniya/CardboardXR-JP](https://github.com/taniniya/CardboardXR-JP) は、[taniniya](https://github.com/taniniya) が [brenpoly/CardboardXR](https://github.com/brenpoly/CardboardXR) を日本語化し、日本語フォントの同梱や GitHub Actions での APK ビルドなどを加えた**改良版（カスタム版）**です。本家 brenpoly 氏の公式配布ではありません。本家の最新版とリリースは [brenpoly/CardboardXR](https://github.com/brenpoly/CardboardXR) にあります。
+
 **Pixel 9 Pro**（Android、ARCore）と **iPhone 15 Pro**（iOS、ARKit、LiDAR 付き）で動作を確認しています。
 
 ## 動画とビューア
