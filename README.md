@@ -1,302 +1,195 @@
 # CardboardXR
 
-A Unity phone app for Google Cardboard-style viewers: split-screen stereo with lens distortion,
-plus what classic Cardboard never had — 6DoF head tracking from ARCore or ARKit, a camera
-passthrough view, detected surfaces with anchored objects, and hand tracking from the phone's rear
-camera with pinch, grab and a pointing ray.
+Google Cardboard 型のビューアで使う Unity 製スマホアプリです。左右分割のステレオ表示とレンズ歪み補正に加えて、従来の Cardboard にはなかった機能を備えています。ARCore または ARKit による 6DoF のヘッドトラッキング、カメラのパススルー表示、検出した面に固定するオブジェクト、そしてスマホの背面カメラによるハンドトラッキング（ピンチ、つかむ、指し示すレイ）です。
 
-Tested on a **Pixel 9 Pro** (Android, ARCore) and an **iPhone 15 Pro** (iOS, ARKit, with LiDAR).
+これは [brenpoly/CardboardXR](https://github.com/brenpoly/CardboardXR) の日本語版です。アプリ内の表示とこの README を日本語にし、日本語フォントを同梱しています。
 
-## Video and viewer
+**Pixel 9 Pro**（Android、ARCore）と **iPhone 15 Pro**（iOS、ARKit、LiDAR 付き）で動作を確認しています。
 
-**Watch the video** about the project on YouTube:
+## 動画とビューア
 
-[![CardboardXR on YouTube](https://img.youtube.com/vi/XtNmiTohUcs/maxresdefault.jpg)](https://youtu.be/XtNmiTohUcs)
+プロジェクトを紹介する**動画**が YouTube にあります:
 
-**Print the viewer**: the 3D print files for a mobile VR viewer made for modern smartphones are on
-MakerWorld: [Mobile VR viewer for modern smartphones](https://makerworld.com/en/models/3511377-mobile-vr-viewer-for-modern-smartphones).
-To make the viewer's phone door fit your phone, enter its dimensions in the
-[phone door generator](https://brenpoly.github.io/CardboardXR/door-generator/). It makes the 3MF and
-STL files in your browser.
+[![YouTube の CardboardXR](https://img.youtube.com/vi/XtNmiTohUcs/maxresdefault.jpg)](https://youtu.be/XtNmiTohUcs)
 
-## Interactive pages
+**ビューアを 3D プリントする**: 現代のスマートフォン向けに作ったモバイル VR ビューアの 3D プリント用ファイルは MakerWorld にあります: [Mobile VR viewer for modern smartphones](https://makerworld.com/en/models/3511377-mobile-vr-viewer-for-modern-smartphones)。
+ビューアのスマホ用ドアを自分のスマホに合わせるには、[スマホ用ドア生成ツール](https://brenpoly.github.io/CardboardXR/door-generator/)にスマホの寸法を入力してください。3MF と STL のファイルをブラウザの中で作ります。
 
-Three interactive pages go with the project. Click an image to open it.
+## インタラクティブなページ
 
-**From Cardboard to VR glasses**: every headset since 2013, by launch price or form factor, and
-where phone VR fell away.
+プロジェクトには 3 つのインタラクティブなページがあります。画像をクリックすると開きます。
 
-[![The headset timeline: every VR headset from 2013 to 2027 plotted by launch price](docs/images/timeline.png)](https://brenpoly.github.io/CardboardXR/)
+**Cardboard から VR グラスへ**: 2013 年以降のすべてのヘッドセットを発売時の価格または形態で並べ、スマホ VR がどこで消えていったかを示します。
 
-**Inside the iPhone build**: how the hardware, Apple's and Unity's frameworks and the app fit
-together, layer by layer.
+[![ヘッドセットの年表: 2013 年から 2027 年までのすべての VR ヘッドセットを発売時の価格で並べたもの](docs/images/timeline.png)](https://brenpoly.github.io/CardboardXR/)
 
-[![The iPhone build's architecture: sensors and camera through ARKit and the AI runtime to head, hand and room tracking, rendering and heat control](docs/images/architecture.png)](https://brenpoly.github.io/CardboardXR/iphone-architecture.html)
+**iPhone ビルドの内部**: ハードウェア、Apple と Unity のフレームワーク、アプリがどう組み合わさっているかを層ごとに示します。
 
-**Phone door generator**: enter your phone's dimensions and download a phone door for the
-3D-printed viewer that fits it, as 3MF or STL files.
+[![iPhone ビルドの構成: センサーとカメラから ARKit と AI ランタイムを通り、頭・手・部屋のトラッキング、描画、発熱の制御まで](docs/images/architecture.png)](https://brenpoly.github.io/CardboardXR/iphone-architecture.html)
 
-[![The phone door generator: a form for the phone's dimensions beside a 3D preview of the door with its orange TPU corner locators](docs/images/door-generator.png)](https://brenpoly.github.io/CardboardXR/door-generator/)
+**スマホ用ドア生成ツール**: スマホの寸法を入力すると、それに合う 3D プリントビューア用のドアを 3MF または STL でダウンロードできます。
 
-The pages are in `docs/`, served by GitHub Pages.
+[![スマホ用ドア生成ツール: スマホの寸法を入れるフォームの隣に、オレンジの TPU 製コーナーロケーター付きドアの 3D プレビュー](docs/images/door-generator.png)](https://brenpoly.github.io/CardboardXR/door-generator/)
 
-## Install
+ページは `docs/` にあり、GitHub Pages で公開しています。
 
-For Android, download the APK from [Releases](https://github.com/brenpoly/CardboardXR/releases) on
-an ARCore phone (Android 10 or later, 64-bit, with Vulkan) and open it. Android asks you to allow
-installing apps from your browser or file manager. For iOS there's no download yet: build it from
-source, below.
+## インストール
 
-## Requirements
+Android は [Releases](https://github.com/brenpoly/CardboardXR/releases) から APK をダウンロードし、ARCore 対応のスマホ（Android 10 以降、64bit、Vulkan 対応）で開いてください。ブラウザやファイルマネージャーからのアプリのインストールを許可するよう求められます。iOS 用のダウンロードはまだありません。下記の手順でソースからビルドしてください。
 
-- Unity **6000.6.8f1** with the Android and iOS build modules. The scripts expect it where Unity
-  Hub puts it; for another location, set `UNITY=/path/to/Unity.app/Contents/MacOS/Unity`
-- For Android: `adb` on your `PATH` (it's in `~/Library/Android/sdk/platform-tools`)
-- For iOS: full Xcode, signed into an Apple ID (a free personal team is enough)
+## 必要なもの
 
-Close the project in the Editor before running any script: they build in batch mode, which needs
-the project lock.
+- Unity **6000.6.8f1** と、Android・iOS のビルドモジュール。スクリプトは Unity Hub がインストールする場所を前提にしています。別の場所にある場合は `UNITY=/path/to/Unity.app/Contents/MacOS/Unity` を設定してください
+- Android の場合: `PATH` の通った `adb`（`~/Library/Android/sdk/platform-tools` にあります）
+- iOS の場合: Xcode 一式と、Apple ID でのサインイン（無料の個人チームで足ります）
 
-## Build and run
+スクリプトを実行する前に、Editor でプロジェクトを閉じてください。スクリプトはバッチモードでビルドするため、プロジェクトのロックが必要です。
 
-Each script builds the app, installs it, launches it and prints the start of the
-session log.
+## ビルドして実行
+
+どのスクリプトもアプリをビルドし、インストールし、起動して、セッションログの冒頭を表示します。
 
 ```sh
 zsh Tools/build_and_run.sh                                   # Android
 zsh Tools/ios_build_and_run.sh                               # iOS
-zsh Tools/ios_build_and_run.sh --xcode                       # iOS, reusing the last Unity export
-zsh Tools/ios_launch.sh                                      # iOS, relaunch without rebuilding
+zsh Tools/ios_build_and_run.sh --xcode                       # iOS、前回の Unity 書き出しを再利用
+zsh Tools/ios_launch.sh                                      # iOS、ビルドせずに再起動
 ```
 
-Builds are release builds. For a development build (debuggable, with the Unity Profiler able to
-connect over the local network), set `CARDBOARDXR_DEVELOPMENT=1`. The app id is
-`com.brenpoly.cardboardxr`; an iOS bundle id belongs to the Apple team that first signed it, so to
-build for your own iPhone pick your own, the same way for every script:
+ビルドはリリースビルドです。開発用ビルド（デバッグでき、Unity Profiler がローカルネットワーク経由で接続できる）にするには、`CARDBOARDXR_DEVELOPMENT=1` を設定してください。アプリ ID は `com.brenpoly.cardboardxr` です。iOS のバンドル ID は最初に署名した Apple のチームに属するので、自分の iPhone 用にビルドするときは自分の ID を選んでください。どのスクリプトでも指定方法は同じです:
 
 ```sh
 CARDBOARDXR_BUNDLE_ID=com.example.cardboardxr zsh Tools/ios_build_and_run.sh
 ```
 
-The Android script also runs the EditMode tests first. On iOS, the first install needs Developer
-Mode on the phone (Settings > Privacy & Security, which only appears after a first install attempt)
-and trusting the developer (Settings > General > VPN & Device Management). The phone must be
-unlocked to launch; a build takes about five minutes, so if it auto-locks in the meantime, unlock
-it and run `ios_launch.sh`.
+Android のスクリプトは、先に EditMode テストも実行します。iOS では、最初のインストールのときにスマホの開発者モード（設定 > プライバシーとセキュリティ。最初に一度インストールを試みたあとで表示されます）と、開発元の信頼（設定 > 一般 > VPN とデバイス管理）が必要です。起動にはスマホのロック解除が要ります。ビルドには 5 分ほどかかるので、その間に自動ロックがかかったら、ロックを解除して `ios_launch.sh` を実行してください。
 
-### Releases
+### リリース
 
-`Tools/release_android.sh 1.2.3` builds a release APK from a fresh clone of the public repository
-(so it holds only the placeholder videos), signs it with your release keystore, checks the signature
-and contents, and makes a draft GitHub release with it to review and publish. The script's header
-says where the keystore and its password go.
+`Tools/release_android.sh 1.2.3` は、公開リポジトリの新しいクローン（プレースホルダーの動画だけが入った状態）からリリース用 APK をビルドし、自分のリリース用キーストアで署名し、署名と中身を確認して、確認して公開するための下書きの GitHub リリースを作ります。キーストアとパスワードの置き場所は、スクリプト冒頭のコメントに書いてあります。
 
-### Building the APK in GitHub Actions
+### GitHub Actions で APK をビルドする
 
-`.github/workflows/android-apk.yml` builds an unsigned-by-default APK when a version tag (`v0.0.1`) is
-pushed, or on demand (Actions > Android APK > Run workflow), and adds it to the tag's release. It runs
-the same build method as the scripts (`ProjectBootstrap.StereoBuilder.BuildAndroid`), on Unity
-`6000.6.8f1` through [game-ci](https://game.ci).
+`.github/workflows/android-apk.yml` は、バージョンタグ（`v0.0.1`）がプッシュされたとき、または手動（Actions > Android APK > Run workflow）で、既定では未署名の APK をビルドし、そのタグのリリースに追加します。スクリプトと同じビルド方法（`ProjectBootstrap.StereoBuilder.BuildAndroid`）を、[game-ci](https://game.ci) 経由の Unity `6000.6.8f1` で実行します。
 
-Secrets (Settings > Secrets and variables > Actions):
+Secrets（Settings > Secrets and variables > Actions）:
 
-- `UNITY_LICENSE`: the contents of a Unity `.ulf`, with `UNITY_EMAIL` and `UNITY_PASSWORD`, or
-  `UNITY_SERIAL` for a Plus/Pro seat instead of those three. https://game.ci/docs/github/activation
-- Optional signing: `ANDROID_KEYSTORE_BASE64` (a base64 `.keystore`), `ANDROID_KEYSTORE_PASS` and
-  `ANDROID_KEY_ALIAS` (default `cardboardxr`). Without them the APK is signed with Unity's debug key,
-  which installs, but can't update a build signed with another key.
+- `UNITY_LICENSE`: Unity の `.ulf` の中身。あわせて `UNITY_EMAIL` と `UNITY_PASSWORD`、または Plus/Pro シートの場合はこの 3 つの代わりに `UNITY_SERIAL` を設定します。https://game.ci/docs/github/activation
+- 署名は任意: `ANDROID_KEYSTORE_BASE64`（base64 にした `.keystore`）、`ANDROID_KEYSTORE_PASS`、`ANDROID_KEY_ALIAS`（既定は `cardboardxr`）。設定しない場合、APK は Unity のデバッグキーで署名されます。インストールはできますが、別のキーで署名したビルドの上に更新することはできません。
 
-Japanese text is drawn in M PLUS 1p, bundled at `Assets/_Project/UI/Resources/MPLUS1p-Regular.ttf` (SIL
-Open Font License 1.1; see `THIRD_PARTY_NOTICES.md`). Every build makes it the dynamic fallback font in
-TMP Settings (`ProjectBootstrap.JapaneseFontSetup`), and `CardboardXR.UI.JapaneseFont` does the same at
-startup for a build without that step.
+日本語は M PLUS 1p で描画します。フォントは `Assets/_Project/UI/Resources/MPLUS1p-Regular.ttf` に同梱しています（SIL Open Font License 1.1。`THIRD_PARTY_NOTICES.md` を参照）。ビルドのたびに TMP Settings の動的フォールバックフォントに設定され（`ProjectBootstrap.JapaneseFontSetup`）、その手順を経ていないビルドでも、起動時に `CardboardXR.UI.JapaneseFont` が同じ設定を行います。
 
-### Launch options
+### 起動オプション
 
-Development overrides, given the same way on both platforms after the script's own arguments:
+開発用の上書き設定です。どちらのプラットフォームでも、スクリプト自身の引数のあとに同じように指定します:
 
 ```sh
 zsh Tools/build_and_run.sh --ei dof 3 --ei mono 1
 zsh Tools/ios_launch.sh --ei dof 3 --ei mono 1
 ```
 
-On Android they're intent extras; on iOS they reach the app as environment variables
-(`CARDBOARDXR_<name>`). Either way they only apply to a launch from the Mac, not one from the
-phone's home screen. The app logs the options it received at startup (`[Stereo] Launch options`).
+Android ではインテントの extra、iOS では環境変数（`CARDBOARDXR_<name>`）としてアプリに届きます。どちらも Mac から起動したときにだけ効き、スマホのホーム画面から起動したときには効きません。アプリは起動時に受け取ったオプションをログに出します（`[Stereo] Launch options`）。
 
-| Option | Effect |
+| オプション | 効果 |
 |---|---|
-| `demo N` | Start in demo N (its index in `Assets/_Project/Demos/DemoCatalog.asset`, from 0) instead of the lobby |
-| `pinch 0` | Pinch-to-click off in 3DoF, for measuring its heat (it's otherwise always on) |
-| `dof 3` | Start the lobby in 3DoF, with no room scan (it starts in 6DoF passthrough otherwise) |
-| `passthrough 1` | Start with the camera passthrough view |
-| `mono 1` | One full-screen view with no lens distortion, for use without a viewer |
-| `boundaryCm N` | Turn on the boundary warning: in VR, a grid on real surfaces within N cm |
-| `arView 1` | Debug view: the AR camera full screen with every detected surface drawn (forces 6DoF) |
-| `fps N` | Target frame rate (default 120) |
-| `renderScale N` | Eye texture resolution in percent (default 100) |
-| `msaa N` | Anti-aliasing samples: 1, 2, 4 or 8 (default 2) |
-| `handHz N` | Run the hand landmark model at most N times a second (default 0: every camera image) |
-| `predictionMs N` | How far ahead head rotation is predicted, in ms (default 30) |
-| `tracker 1` | Head rotation from Android's game rotation vector instead of the app's own sensor fusion |
-| `nativeImu 0` | Android: read the sensors through the Input System instead of the native plugin |
-| `imuPosition 0` | Leave the accelerometer out of 6DoF position, for comparison |
-| `handAxes 1..8` | Override how the camera image's axes lie on screen, for hand tracking |
-| `pinchStudy 1` | A prompted run that logs pinch measurements, for tuning pinch detection |
-| `uiScale N` | Size of the Material UI in percent of Android XR's dp sizes (default 160, for phone viewers' lower resolution) |
-| `brightness N` | Screen brightness while the app is in front, in percent (default 90; 0 leaves it alone) |
-| `libraryRows N` | Rows of apps on each page of the app library, 1 to 4 (default 2). `1` shows paging with only a few demos |
+| `demo N` | ロビーではなくデモ N で始める（`Assets/_Project/Demos/DemoCatalog.asset` の 0 から始まる番号） |
+| `pinch 0` | 3DoF でピンチによるクリックをオフにする。発熱を測るため（通常は常にオン） |
+| `dof 3` | ロビーを 3DoF で始め、部屋のスキャンをしない（通常は 6DoF パススルーで始まる） |
+| `passthrough 1` | カメラのパススルー表示で始める |
+| `mono 1` | レンズ歪みのない 1 枚の全画面表示にする。ビューアなしで使う場合向け |
+| `boundaryCm N` | 境界の警告をオンにする。VR では、N cm 以内に入った実在の面にグリッドを表示する |
+| `arView 1` | デバッグ表示: AR カメラを全画面にし、検出したすべての面を描く（6DoF 固定） |
+| `fps N` | 目標フレームレート（既定 120） |
+| `renderScale N` | アイテクスチャの解像度を百分率で指定（既定 100） |
+| `msaa N` | アンチエイリアスのサンプル数。1、2、4、8（既定 2） |
+| `handHz N` | 手のランドマークモデルを 1 秒に最大 N 回動かす（既定 0: カメラ画像ごと） |
+| `predictionMs N` | 頭の回転を何 ms 先まで予測するか（既定 30） |
+| `tracker 1` | 頭の回転を、アプリ独自のセンサー融合ではなく Android の game rotation vector から取る |
+| `nativeImu 0` | Android: センサーをネイティブプラグインではなく Input System 経由で読む |
+| `imuPosition 0` | 6DoF の位置から加速度計を外す。比較用 |
+| `handAxes 1..8` | ハンドトラッキング用に、カメラ画像の軸が画面上でどう向くかを上書きする |
+| `pinchStudy 1` | ピンチの測定値をログに出す、指示付きの実行。ピンチ検出の調整用 |
+| `uiScale N` | Material UI の大きさを Android XR の dp サイズの百分率で指定（既定 160。スマホ用ビューアの低い解像度向け） |
+| `brightness N` | アプリが前面にある間の画面の明るさを百分率で指定（既定 90。0 なら変更しない） |
+| `libraryRows N` | アプリライブラリの 1 ページあたりの行数。1〜4（既定 2）。デモが少ないときにページ送りを見るには `1` |
 
-## Using the app
+## アプリの使い方
 
-- **The screen's gear button**, top right, opens a small menu: *Set viewer* scans a viewer's QR
-  code; *Phone view* / *Viewer view* switches between the viewer's split-screen view and a single
-  full-screen phone view; *Open settings* opens the settings panel.
-- **The app library**, above the settings panel, has an icon for the lobby and each demo: look at
-  one to see what it is, and pinch or tap to open it, from anywhere, so you can go straight from one
-  demo to another. It shows six apps a page; with more, arrows on either side turn the page. *Apps*
-  on the settings panel shows and hides it. The lobby is a checkerboard room
-  to start from, and opens with the library showing. As the app starts, the lobby is in 6DoF
-  passthrough and first scans your room: look around at the floor and any tables until it says it's
-  done (or tap *Skip*), so the demos start with tracking running and surfaces found. Each demo switches on what it needs (6DoF,
-  passthrough, hands) and leaving puts back what you had.
-- **Input is gaze and pinch everywhere**: look at something and pinch in front of the camera to
-  click it. A screen tap works too. The reticle turns light blue while the camera sees your hand.
-  In 6DoF demos, hand tracking does it (and picks things up); in 3DoF, a lighter detector that only
-  watches for pinches, from a plain camera feed, and slows down while no hand is in view.
-  Every pinch goes through one order (`PinchRouter`): the palm's settings gear, then a button under
-  the gaze, then the demo's own use (painting, hitting orbs), then picking up, then a plain click.
-  If you rest your gaze on a button with no hand in the camera's view, a hint under the reticle says
-  to raise it.
-- **360 Video** plays 360 and VR180 videos, 2D or 3D. Pinch on the video for the controls. Two
-  small test clips are bundled. To bundle your own in local builds, put them in a `360` folder
-  beside the project (or set `CARDBOARDXR_VIDEOS`): the build scripts copy them into
-  `Assets/StreamingAssets`, which git ignores apart from the test clips. Or add your own to the app's `Videos` folder on the phone: on
-  Android `adb push video.mp4 /storage/emulated/0/Android/data/com.brenpoly.cardboardxr/files/Videos`;
-  on iPhone, Finder's Files tab for the phone, then CardboardXR > Videos. Tags in the name set the
-  format (`_360`, `_180`, `_sbs`, `_tb`, `_mono`). For Google Drive, put share links in
-  `videos.txt` in that folder, one per line; each downloads on first play.
-- **Air Paint** paints strokes in the air with your hand, like Tilt Brush, starting in passthrough
-  so you paint in your own room: pinch to paint, and look at the tool panel on your left and pinch
-  to pick a color, brush (Ink, Tube, Glow) and size, or to undo, reset (press twice), or switch
-  between passthrough and VR.
-- **Orb Rush** is a one-handed game: orbs fly toward you and you hit them with your
-  hand as they reach their rings. Face the way you want to play and press Start; Pause (on the
-  score line above the track) resumes, restarts or quits a round. The best score is kept.
-- **Portal** opens a doorway on your floor (look at it and pinch) with a night world beyond it.
-  Walk through the frame, off the cable, and the world surrounds you, with your room showing
-  through the door behind; walk back through to return. It's in passthrough, so all of it is flat.
-- **The settings panel**, in every scene: hold a hand up with its palm toward you and a gear button
-  appears between your thumb and index finger; pinch to open the panel in front of you. It has
-  *Apps* (the app library), *Recenter* and *Scan Room* (in 6DoF: scans again, or ends a scan), and the toggles *6DoF* and *Passthrough*. It follows
-  you lazily as you turn; the *X* below it closes it. Look at a button and tap the screen, or
-  pinch. Holding a tap recenters.
-- **Surfaces** are found by the lobby's scan at launch, which runs until it finds nothing new. When
-  6DoF starts again later (after the 360 Video, say) a shorter scan runs until the floor is found,
-  to save CPU for the hand models; the Cube Sandbox scans the whole room if the lobby's didn't.
-- **Placing and moving objects**: in 6DoF, look at a surface and tap or pinch to place a cube,
-  which is anchored there. Your head aims and a pinch clicks; your hand, or its ray, picks cubes
-  up. A cube turns cyan when a pinch would grab it. Held, it turns with your hand and knocks other
-  cubes aside; open your fingers to let go or throw it. Free cubes have physics: they fall, bounce
-  off each other and land on detected surfaces. If the camera loses your hand while you hold one,
-  it stays where it was rather than dropping.
+- **画面右上の歯車ボタン**を押すと、小さなメニューが開きます。*ビューアを設定* はビューアの QR コードを読み取ります。*スマホ表示* / *ビューア表示* は、ビューア用の左右分割表示とスマホの全画面表示を切り替えます。*設定を開く* は設定パネルを開きます。
+- **アプリライブラリ**は設定パネルの上にあり、ロビーと各デモのアイコンが並びます。アイコンに視線を置くと何のアプリかが表示され、ピンチかタップで開けます。どこからでも開けるので、デモからデモへ直接移れます。1 ページに 6 個表示され、それより多いときは左右の矢印でページを送ります。設定パネルの *アプリ* で表示と非表示を切り替えられます。ロビーはチェッカーボードの部屋で、ライブラリを表示した状態で開きます。アプリが起動すると、ロビーは 6DoF パススルーになり、まず部屋をスキャンします。床やテーブルに視線を向けて見回し、終わったと表示されるまで待ってください（*スキップ* も押せます）。こうするとデモは、トラッキングが動き面が見つかった状態で始まります。各デモは必要なもの（6DoF、パススルー、手のトラッキング）を自分でオンにし、デモを出ると元の状態に戻します。
+- **入力はどこでも視線とピンチ**: 何かに視線を置き、カメラの前でピンチするとクリックになります。画面のタップでも同じです。カメラが手を捉えている間は、レティクルが水色になります。6DoF のデモではハンドトラッキングが担当し（物をつかむのも同じです）、3DoF ではピンチだけを見る軽い検出器が普通のカメラ映像から担当します（手が映っていない間は速度を落とします）。ピンチはすべて 1 つの順序（`PinchRouter`）を通ります。まず手のひらの設定ギア、次に視線の先のボタン、次にデモ自身の用途（ペイント、オーブを打つ）、次につかむ、最後に通常のクリックです。手がカメラに映っていないのにボタンに視線を置くと、レティクルの下に、手を上げるよう促すヒントが出ます。
+- **360度動画** は 360 度の動画と VR180 動画を、2D でも 3D でも再生します。動画をピンチすると操作パネルが出ます。小さなテストクリップが 2 本同梱されています。ローカルビルドに自分の動画を入れるには、プロジェクトの隣に `360` フォルダを作って入れるか（`CARDBOARDXR_VIDEOS` でも指定できます）、ビルドスクリプトがそれを `Assets/StreamingAssets` にコピーします（テストクリップ以外は git の管理外です）。スマホのアプリの `Videos` フォルダに自分で追加することもできます。Android では `adb push video.mp4 /storage/emulated/0/Android/data/com.brenpoly.cardboardxr/files/Videos`、iPhone では Finder でスマホの「ファイル」タブを開き、CardboardXR > Videos。ファイル名のタグ（`_360`、`_180`、`_sbs`、`_tb`、`_mono`）で形式を指定します。Google Drive の動画は、そのフォルダの `videos.txt` に共有リンクを 1 行に 1 本ずつ並べてください。再生するたびに最初の 1 回だけダウンロードします。
+- **空間ペイント** は Tilt Brush のように、手で空中に線を描きます。パススルーで始まるので、自分の部屋に描けます。ピンチで描き、左のツールパネルに視線を置いてピンチすると、色、ブラシ（インク、チューブ、グロー）、太さ（小・中・大）を選べます。ほかに戻す、全消去（2 回押し）、パススルーと VR の切り替えがあります。
+- **オーブラッシュ** は片手で遊ぶゲームです。オーブが手前に飛んでくるので、リングに届くところで手で打ちます。遊びたい方向を向いて「スタート」を押してください。コース上のスコアの行にある「一時停止」からは、再開、やり直し、終了を選べます。ベストスコアは保存されます。
+- **ポータル** は床に戸口を開け（見てピンチ）、その先に夜の世界が広がります。枠をくぐってケーブルから離れると、周囲がその世界になり、背後のドアからは自分の部屋が見えます。戻るときはもう一度くぐってください。パススルーの中で動くので、全体が平面的です。
+- **設定パネル** はどのシーンにもあります。手のひらを自分に向けて手を上げると、親指と人差し指の間に歯車ボタンが現れます。ピンチすると目の前にパネルが開きます。*アプリ*（アプリライブラリ）、*正面に戻す*、*部屋スキャン*（6DoF の場合: もう一度スキャンする、またはスキャンを終える）、*6DoF* と *パススルー* のトグルがあります。体の向きに合わせてゆっくり追従し、下の *X* で閉じます。ボタンに視線を置いて画面をタップするか、ピンチしてください。タップを長押しすると正面に戻ります。
+- **面の検出** は、起動時のロビーのスキャンで行い、新しい面が見つからなくなるまで続きます。あとで 6DoF を再び始めるとき（360度動画のあとなど）は、床が見つかるまでの短いスキャンを行い、手のモデルのために CPU を節約します。キューブ箱庭は、ロビーのスキャンで足りなかった場合に部屋全体をスキャンします。
+- **オブジェクトの配置と移動**: 6DoF では、面に視線を置いてタップかピンチするとキューブが置かれ、その場所に固定されます。頭で狙ってピンチでクリックし、手（またはそのレイ）でキューブをつかみます。ピンチでつかめるキューブは水色になります。つかんでいる間は手と一緒に回り、ほかのキューブを押しのけます。指を開くと離すか投げます。自由なキューブには物理演算があり、落ちて、互いに跳ね返り、検出した面に着地します。キューブを持っている間にカメラが手を見失っても、落ちずにその場に残ります。
 
-## Logs
+## ログ
 
-Every launch writes a session log on the phone, replacing the last one (which is kept as
-`session-previous.log`). The scripts print its start; to read the whole thing:
+起動するたびに、スマホにセッションログが書かれ、前回のログを置き換えます（前回分は `session-previous.log` として残ります）。スクリプトはログの冒頭を表示します。全体を読むには:
 
 ```sh
 adb pull /storage/emulated/0/Android/data/com.brenpoly.cardboardxr/files/session.log   # Android
 ```
 
-On iOS, `ios_launch.sh` copies it to `$TMPDIR/cardboardxr/ios-session.log`.
+iOS では `ios_launch.sh` が `$TMPDIR/cardboardxr/ios-session.log` にコピーします。
 
-Lines are tagged by area: `[Pose]` head tracking, `[AR]` the AR session, `[Room]` surfaces and the
-floor, `[Anchor]` placed objects, `[Hands]` hand tracking and grabs, `[Pinch]` the pinch study,
-`[Passthrough]`, `[Gaze]` clicks, `[Frames]` and `[Hitch]` frame timing, `[Stereo]` setup, and
-`[Tracking]` the motion sensors. Most areas log a status line every five seconds. Warnings and
-errors are always kept.
+行には分野ごとのタグが付きます。`[Pose]` 頭のトラッキング、`[AR]` AR セッション、`[Room]` 面と床、`[Anchor]` 置いたオブジェクト、`[Hands]` ハンドトラッキングとつかむ動作、`[Pinch]` ピンチ調査、`[Passthrough]`、`[Gaze]` クリック、`[Frames]` と `[Hitch]` フレームのタイミング、`[Stereo]` セットアップ、`[Tracking]` モーションセンサー。ほとんどの分野は 5 秒ごとに状態を 1 行記録します。警告とエラーは常に残ります。
 
-## Recording clips
+## クリップの録画
 
-To film what one eye sees, without the lens distortion, record the phone's screen while using the
-app in the viewer, then flatten one eye with `Tools/record_eye.py`:
+片目に見えている映像を、レンズ歪みなしで撮るには、ビューアでアプリを使いながらスマホの画面を録画し、`Tools/record_eye.py` で片目を平らにします:
 
-- **iPhone**: on the Mac, QuickTime Player > File > New Movie Recording, and pick the iPhone as the
-  camera (over USB). The phone writes no file, so it costs little.
-- **Android**: `scrcpy --record clip.mp4` over USB, or the phone's own screen recorder.
+- **iPhone**: Mac で QuickTime Player > ファイル > 新規ムービー収録を選び、カメラとして iPhone を選びます（USB 接続）。スマホ側にファイルを書かないので、負担は小さい方法です。
+- **Android**: USB 接続で `scrcpy --record clip.mp4`、またはスマホ標準の画面録画。
 
 ```sh
-python3 Tools/record_eye.py clip.mov --log session.log          # screen and viewer from the run's log
-python3 Tools/record_eye.py clip.mov --phone iphone --fov 70    # Cardboard v1; narrower is sharper
+python3 Tools/record_eye.py clip.mov --log session.log          # その実行のログから画面とビューアを決める
+python3 Tools/record_eye.py clip.mov --phone iphone --fov 70    # Cardboard v1。狭いほどくっきり
 ```
 
-It crops the left eye (`--eye right` for the other), undoes the distortion with the app's own lens
-math, and writes a 1920x1080 (`--size`) H.264 clip next to the input; `--start` and `--duration`
-trim it. In passthrough both eyes see the same image, so one eye is the whole experience.
+左目を切り出し（`--eye right` で右目）、アプリ自身のレンズ計算で歪みを戻して、1920x1080（`--size`）の H.264 クリップを入力の隣に書き出します。`--start` と `--duration` で範囲を切り取れます。パススルーでは両目に同じ映像が映るので、片目で全体がわかります。
 
-## Tests
+## テスト
 
 ```sh
 /Applications/Unity/Hub/Editor/6000.6.8f1/Unity.app/Contents/MacOS/Unity -batchmode \
     -projectPath . -runTests -testPlatform EditMode -testResults results.xml
 ```
 
-EditMode tests cover the parts that don't need a device: lens distortion and viewer QR profiles,
-sensor and pose fusion, the camera clock, hand geometry, pinch detection, depth sampling and palm
-calibration, floor picking, passthrough, gaze pointing and anchoring. Each demo's own tests are in
-its folder, under `Tests`.
+EditMode テストは、実機を必要としない部分を対象にします。レンズ歪みとビューアの QR プロファイル、センサーと姿勢の融合、カメラの時計、手の形状、ピンチ検出、深度のサンプリングと手のひらのキャリブレーション、床の選択、パススルー、視線によるポインティングとアンカリングです。各デモのテストは、そのフォルダの `Tests` にあります。
 
-## How it's built
+## 仕組み
 
-Only one XR loader can run at a time, and AR Foundation's (ARCore, ARKit) is the one that provides
-6DoF, the camera and surfaces. So the app doesn't use Google's Cardboard plugin: it renders its own
-stereo views, with lens distortion ported from the Cardboard SDK.
+XR ローダーは同時に 1 つしか動かせず、6DoF、カメラ、面を提供するのは AR Foundation のもの（ARCore、ARKit）です。そのためこのアプリは Google の Cardboard プラグインを使わず、自前でステレオ表示を描画し、レンズ歪みは Cardboard SDK から移植しています。
 
-Code is in `Assets/_Project/Scripts`, one assembly per area:
+コードは `Assets/_Project/Scripts` に、分野ごとに 1 つのアセンブリとして入っています:
 
-- **Stereo** — the stereo rig and lens distortion, head tracking (a gyroscope fusion corrected by
-  AR poses), passthrough, surfaces, anchors, frame timing and the session log
-- **Hands** — hand tracking with MediaPipe's BlazeHand models on Unity Inference Engine, placed in
-  3D and fed to XR Hands and the XR Interaction Toolkit; on iOS, LiDAR depth teaches the hand's size
-- **Interaction** — gaze pointing and highlighting
-- **UI** — a Material Design for XR kit (Material 3's baseline dark scheme, Roboto, Material
-  Icons) sized in Android XR's dp, which every scene's UI is built from
-- **Demos** — moving between the lobby and the demos, and what each demo needs from Core
-- **Tracking** — sensor fusion and filters with no Unity dependencies
+- **Stereo** — ステレオのリグとレンズ歪み、頭のトラッキング（AR の姿勢で補正するジャイロの融合）、パススルー、面、アンカー、フレームのタイミング、セッションログ
+- **Hands** — Unity Inference Engine 上の MediaPipe BlazeHand モデルによるハンドトラッキング。3D 空間に配置し、XR Hands と XR Interaction Toolkit に渡します。iOS では LiDAR の深度で手の大きさを学びます
+- **Interaction** — 視線によるポインティングとハイライト
+- **UI** — Material Design for XR のキット（Material 3 の基準ダーク配色、Roboto、Material Icons）を Android XR の dp で寸法指定したもので、各シーンの UI はこれで組み立てています
+- **Demos** — ロビーとデモの間の移動と、各デモが Core に何を求めるか
+- **Tracking** — Unity に依存しないセンサーの融合とフィルタ
 
-**The app is one Core scene with the lobby and demos loaded on top.** Core holds everything that
-has to keep running across demos: the rig, head tracking, AR, hands, gaze and the settings panel. The lobby
-and each demo are scenes loaded additively and unloaded on leaving; `DemoManager` switches between
-them and demo scripts reach Core through `CoreServices`. Everything a demo has lives in
-`Assets/_Project/Demos/<Name>/`: its scene, assets, scripts and tests, and a `DemoSetup` that
-gives its entry in `DemoCatalog.asset` (its scene and what it needs) and makes its starter scene.
-[ADDING_A_DEMO.md](ADDING_A_DEMO.md) explains how to make one for your own build, either by hand or
-with a coding agent and the skill in `Tools/new-demo`. This repository doesn't take new demos.
+**アプリは Core シーン 1 つに、ロビーとデモを上に読み込む構成です。** Core はデモをまたいで動き続ける必要のあるものを持ちます。リグ、頭のトラッキング、AR、手、視線、設定パネルです。ロビーと各デモは追加で読み込み、離れるときに読み込みを外すシーンで、`DemoManager` がその間を切り替え、デモのスクリプトは `CoreServices` を通じて Core に届きます。デモに必要なものはすべて `Assets/_Project/Demos/<Name>/` に入ります。シーン、アセット、スクリプト、テスト、そして `DemoCatalog.asset` の自分の項目（シーンと必要なもの）とスターターシーンを作る `DemoSetup` です。
+[ADDING_A_DEMO.md](ADDING_A_DEMO.md) では、自分のビルド用にデモを追加する方法を、手作業でも、コーディングエージェントと `Tools/new-demo` のスキルでも説明しています。このリポジトリは新しいデモは受け付けません。
 
-**Core is generated**, not edited by hand: `Assets/Editor/ProjectBootstrap/StereoBuilder.cs`
-builds `Core.unity` and its materials on every build, so changes made to them in the Editor are
-lost. **The lobby and demos are edited by hand**: `DemoScenes.cs` makes the lobby and the catalog,
-and each demo's setup makes its starter scene and catalog entry. Each is made only when it's
-missing, and none is ever overwritten. `ProjectSetup.Apply` sets the player and XR settings for both platforms.
+**Core は生成される**もので、手では編集しません。`Assets/Editor/ProjectBootstrap/StereoBuilder.cs` がビルドのたびに `Core.unity` とそのマテリアルを作るので、Editor で加えた変更は失われます。**ロビーとデモは手で編集します**: `DemoScenes.cs` がロビーとカタログを作り、各デモのセットアップがスターターシーンとカタログの項目を作ります。どちらも無いときにだけ作られ、上書きされることはありません。`ProjectSetup.Apply` が両プラットフォームのプレイヤー設定と XR 設定を行います。
 
-See [KNOWN_ISSUES.md](KNOWN_ISSUES.md) for current limitations and
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for ported code and models.
+現在の制限は [KNOWN_ISSUES.md](KNOWN_ISSUES.md)、移植したコードとモデルは [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) を参照してください。
 
-## Privacy and the network
+## プライバシーとネットワーク
 
-The app works offline. The camera images used for tracking, passthrough and QR scanning are
-processed on the phone and never stored or sent anywhere. It goes online only when you ask:
+アプリはオフラインで動きます。トラッキング、パススルー、QR の読み取りに使うカメラ画像はスマホ上で処理され、保存も送信もされません。通信するのは、あなたが頼んだときだけです:
 
-- **Scanning a viewer's QR code**: short links on the code are followed over HTTPS, at most five
-  redirects, until they reach a Cardboard viewer URL, as Google's Cardboard apps do.
-- **Google Drive videos** listed in `videos.txt`: each downloads from Google Drive on first play.
+- **ビューアの QR コードの読み取り**: コード上の短いリンクを HTTPS でたどります（リダイレクトは最大 5 回）。Google の Cardboard アプリと同じように、Cardboard ビューアの URL に着くまで続けます。
+- **`videos.txt` に並べた Google Drive の動画**: 再生するたびに最初の 1 回だけ Google Drive からダウンロードします。
 
-Unity's analytics, crash reporting and engine diagnostics are off. The session log stays on the
-phone (in the app's own storage) and holds tracking and performance figures, nothing personal.
+Unity のアナリティクス、クラッシュレポート、エンジン診断はオフです。セッションログはスマホの中（アプリ自身のストレージ）に残り、トラッキングと性能の数値を含みますが、個人的な情報は含みません。
 
-## License
+## ライセンス
 
-Apache License 2.0; see [LICENSE](LICENSE). Bundled third-party code, models and fonts keep their
-own licenses, listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Apache License 2.0 です。[LICENSE](LICENSE) を参照してください。同梱のサードパーティのコード、モデル、フォントはそれぞれのライセンスに従います。[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) に一覧があります。
